@@ -4,9 +4,6 @@ import (
 	"CaliYa/core/domain/models"
 	"CaliYa/core/domain/ports"
 	"context"
-	"net/http"
-
-	"github.com/labstack/echo/v4"
 )
 
 type productsApp struct {
@@ -17,11 +14,20 @@ func NewProductsApp(repo ports.ProductsRepo) ports.ProductsApp {
 	return &productsApp{repo}
 }
 
-func (p *productsApp) GetProducts(ctx context.Context) ([]models.ProductsShops, error) {
+func (p *productsApp) RegisterProduct(ctx context.Context) error {
+
+	// if err := p.repo.RegisterProducts(ctx); err != nil {
+	// 	return err
+	// }
+
+	return nil
+}
+
+func (p *productsApp) GetProducts(ctx context.Context) (*models.ProductsShops, error) {
 
 	products, err := p.repo.GetProducts(ctx)
 	if err != nil {
-		return make([]models.ProductsShops, 0), echo.NewHTTPError(http.StatusInternalServerError, "unexpected error")
+		return products, err
 	}
 
 	return products, nil

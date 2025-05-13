@@ -22,6 +22,7 @@ func Get() *Config {
 type Config struct {
 	Server   Server   `env:"server"`
 	Postgres Postgres `env:"postgres"`
+	Mongo    Mongo    `env:"mongo"`
 	Redis    Redis    `env:"redis"`
 }
 
@@ -35,6 +36,10 @@ type Postgres struct {
 	User     string `env:"user"`
 	Password string `env:"password"`
 	Database string `env:"database"`
+}
+
+type Mongo struct {
+	Url string `env:"url"`
 }
 
 type Redis struct {

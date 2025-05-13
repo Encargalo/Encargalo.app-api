@@ -2,12 +2,14 @@ package adapters
 
 import (
 	"CaliYa/config"
+	"database/sql"
 	"fmt"
+	"log"
 
-	"gorm.io/gorm"
-	"gorm.io/gorm/logger"
-
-	"gorm.io/driver/postgres"
+	"github.com/uptrace/bun"
+	"github.com/uptrace/bun/dialect/pgdialect"
+	"github.com/uptrace/bun/driver/pgdriver"
+	"github.com/uptrace/bun/extra/bundebug"
 )
 
 type pgOptions struct {
@@ -19,10 +21,11 @@ type pgOptions struct {
 }
 
 func (p *pgOptions) getDNS() string {
-	return fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", p.host, p.port, p.user, p.password, p.database)
+	return fmt.Sprintf("postgres://%s:%s@%s:%d/%s?sslmode=disable", p.user, p.password, p.host, p.port, p.database)
 }
 
-func NewPostgresConnection(config config.Config) *gorm.DB {
+func NewPostgresConnection(config config.Config) *bun.DB {
+
 	configPostgres := config.Postgres
 	dns := pgOptions{
 		host:     configPostgres.Host,
@@ -32,16 +35,17 @@ func NewPostgresConnection(config config.Config) *gorm.DB {
 		database: configPostgres.Database,
 	}
 
-	dbInstance, err := gorm.Open(postgres.Open(dns.getDNS()), &gorm.Config{
-		Logger: logger.Default.LogMode(logger.Error),
-	})
+	sqldb := sql.OpenDB(pgdriver.NewConnector(pgdriver.WithDSN(dns.getDNS())))
 
-	if err != nil {
-		panic(err)
+	if err := sqldb.Ping(); err != nil {
+		log.Fatalf("Error al hacer ping a la base de datos: %v", err)
 	}
 
-	println("Connected to postgres database")
+	db := bun.NewDB(sqldb, pgdialect.New())
+	db.AddQueryHook(bundebug.NewQueryHook(
+		bundebug.WithVerbose(true),
+	))
 
-	return dbInstance
+	return db
 
 }

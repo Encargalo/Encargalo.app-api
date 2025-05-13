@@ -6,9 +6,10 @@ import (
 )
 
 type ProductsApp interface {
-	GetProducts(ctx context.Context) ([]models.ProductsShops, error)
+	RegisterProduct(ctx context.Context) error
+	GetProducts(ctx context.Context) (*models.ProductsShops, error)
 }
 
 type ProductsRepo interface {
-	GetProducts(ctx context.Context) ([]models.ProductsShops, error)
+	GetProducts(ctx context.Context) (*models.ProductsShops, error)
 }
