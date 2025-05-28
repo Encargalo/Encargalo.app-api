@@ -21,17 +21,6 @@ func NewProductsRepo(db *bun.DB) ports.ProductsRepo {
 	return &productsRepo{db}
 }
 
-// func newConnection() *bun.DB {
-// 	dsn := "postgres://test:test@localhost:5432/caliya?sslmode=disable"
-// 	sqldb := sql.OpenDB(pgdriver.NewConnector(pgdriver.WithDSN(dsn)))
-// 	db := bun.NewDB(sqldb, pgdialect.New())
-// 	db.AddQueryHook(bundebug.NewQueryHook(
-// 		bundebug.WithVerbose(true), // Imprime todas las consultas
-// 	))
-
-// 	return db
-// }
-
 func (p *productsRepo) GetProducts(ctx context.Context) (*models.ProductsShops, error) {
 
 	products := new(models.ProductsShops)

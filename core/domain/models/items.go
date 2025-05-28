@@ -1,6 +1,7 @@
 package models
 
 import (
+	"context"
 	"time"
 
 	"github.com/google/uuid"
@@ -20,4 +21,20 @@ type Items struct {
 	CreatedAt   time.Time `bun:"created_at,default:now()" json:"-"`
 	UpdatedAt   time.Time `bun:"updated_at,default:now()" json:"-"`
 	DeletedAt   time.Time `bun:"deleted_at" json:"-"`
+}
+
+type ItemsOrders struct {
+	bun.BaseModel `bun:"table:business.order_items"`
+
+	ItemID      uuid.UUID `bun:"item_id" json:"item_id" validate:"required,uuid4" mold:"trim"`
+	OrderID     uuid.UUID `bun:"order_id"`
+	CantItem    int       `bun:"cant_item" json:"cant_item" validate:"required" mold:"trim"`
+	UnitPrice   int       `bun:"unit_price"`
+	TotalPrice  int       `bun:"total_price"`
+	Observation string    `bun:"observation" json:"observation"`
+}
+
+func (io *ItemsOrders) Validate() error {
+	_ = conform.Struct(context.Background(), io)
+	return validate.Struct(io)
 }

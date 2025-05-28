@@ -1,8 +1,13 @@
 package models
 
-import "github.com/google/uuid"
+import (
+	"github.com/google/uuid"
+	"github.com/uptrace/bun"
+)
 
 type Shops struct {
-	ID   uuid.UUID `json:"id"`
+	bun.BaseModel `bun:"table:business.shops"`
+
+	ID   uuid.UUID `bun:"id,pk" json:"id"`
 	Name string    `json:"name"`
 }
