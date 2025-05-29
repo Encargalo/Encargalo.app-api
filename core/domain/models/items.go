@@ -18,6 +18,7 @@ type Items struct {
 	Price       int       `bun:"price" json:"price"`
 	Image       string    `bun:"image" json:"image"`
 	Description string    `bun:"description" json:"description"`
+	Score       int       `bun:"score" json:"score"`
 	CreatedAt   time.Time `bun:"created_at,default:now()" json:"-"`
 	UpdatedAt   time.Time `bun:"updated_at,default:now()" json:"-"`
 	DeletedAt   time.Time `bun:"deleted_at" json:"-"`

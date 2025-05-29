@@ -31,7 +31,8 @@ func (p *productsRepo) GetProductsBy(ctx context.Context, criteria models.Search
 		Where("id = ?", criteria.ShopID).
 		Relation("Categories").
 		Relation("Categories.Items", func(q *bun.SelectQuery) *bun.SelectQuery {
-			return q.OrderExpr("price ASC")
+			return q.Where("is_available = ?", true).
+				OrderExpr("price ASC")
 		}).
 		Scan(ctx); err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
@@ -64,8 +65,8 @@ func (p *productsRepo) GetCombos(ctx context.Context) ([]models.Combos, error) {
 	}
 
 	if err := p.db.NewSelect().
-		Model(&items).
-		Where("category_id in (?)", bun.In(ids)).
+		Model(&items).OrderExpr("price ASC").
+		Where("category_id in (?) and is_available = ?", bun.In(ids), true).
 		Relation("ProductsShops").
 		Scan(ctx); err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
