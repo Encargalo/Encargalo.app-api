@@ -20,15 +20,3 @@ type Categories struct {
 
 	Items []Items `bun:"rel:has-many,join:id=category_id" json:"items"`
 }
-
-func (c *Categories) GetCategoriesID(cat []Categories) []uuid.UUID {
-
-	ids := make([]uuid.UUID, len(cat))
-
-	for i := range ids {
-		ids[i] = cat[i].ID
-	}
-
-	return ids
-
-}
