@@ -26,7 +26,7 @@ func (p *productsRepo) GetProductsBy(ctx context.Context, criteria models.Search
 
 	if err := p.db.NewSelect().
 		Model(products).
-		Where("id = ?", criteria.ID).
+		Where("id = ?", criteria.ShopID).
 		Relation("Categories").
 		Relation("Categories.Items", func(q *bun.SelectQuery) *bun.SelectQuery {
 			return q.OrderExpr("price ASC")

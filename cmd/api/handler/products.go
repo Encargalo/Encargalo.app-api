@@ -11,6 +11,7 @@ import (
 type Products interface {
 	RegisterProducts(c echo.Context) error
 	GetProductsBy(c echo.Context) error
+	GetCombos(c echo.Context) error
 }
 
 type products struct {
@@ -53,4 +54,9 @@ func (p *products) GetProductsBy(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, products)
+}
+
+func (p *products) GetCombos(c echo.Context) error {
+
+	return c.JSON(http.StatusOK, "")
 }

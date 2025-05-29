@@ -7,7 +7,7 @@ import (
 )
 
 type SearchProductsBy struct {
-	ID uuid.UUID `json:"id" query:"id" validate:"uuid4"`
+	ShopID uuid.UUID `json:"shop_id" query:"shop_id" validate:"uuid4"`
 }
 
 func (s *SearchProductsBy) Validate() error {
