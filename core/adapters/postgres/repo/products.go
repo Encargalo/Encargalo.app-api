@@ -6,7 +6,6 @@ import (
 	"context"
 	"database/sql"
 	"errors"
-	"fmt"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
@@ -21,22 +20,22 @@ func NewProductsRepo(db *bun.DB) ports.ProductsRepo {
 	return &productsRepo{db}
 }
 
-func (p *productsRepo) GetProducts(ctx context.Context) (*models.ProductsShops, error) {
+func (p *productsRepo) GetProductsBy(ctx context.Context, criteria models.SearchProductsBy) (*models.ProductsShops, error) {
 
 	products := new(models.ProductsShops)
 
 	if err := p.db.NewSelect().
 		Model(products).
-		Where("opened = ?", true).
+		Where("id = ?", criteria.ID).
 		Relation("Categories").
 		Relation("Categories.Items", func(q *bun.SelectQuery) *bun.SelectQuery {
 			return q.OrderExpr("price ASC")
 		}).
 		Scan(ctx); err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			fmt.Println("No rows found")
-			return products, echo.NewHTTPError(http.StatusNotFound, "not found")
+			return products, echo.NewHTTPError(http.StatusNotFound, "products not found")
 		}
+		return products, echo.NewHTTPError(http.StatusInternalServerError, "unexpected error")
 	}
 
 	return products, nil

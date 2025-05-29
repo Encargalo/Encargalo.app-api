@@ -33,7 +33,9 @@ func (p promotionsRepository) GetPromotions(ctx context.Context) ([]models.Items
 			fmt.Println("No rows found")
 			return promotions, echo.NewHTTPError(http.StatusNotFound, "not found")
 		}
-		fmt.Println(err)
+
+		return promotions, echo.NewHTTPError(http.StatusInternalServerError, "unexpected error")
+
 	}
 
 	return promotions, nil

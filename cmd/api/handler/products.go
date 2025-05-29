@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"CaliYa/core/domain/models"
 	"CaliYa/core/domain/ports"
 	"net/http"
 
@@ -9,7 +10,7 @@ import (
 
 type Products interface {
 	RegisterProducts(c echo.Context) error
-	GetProducts(c echo.Context) error
+	GetProductsBy(c echo.Context) error
 }
 
 type products struct {
@@ -32,11 +33,21 @@ func (p *products) RegisterProducts(c echo.Context) error {
 	return c.JSON(http.StatusOK, "ok")
 }
 
-func (p *products) GetProducts(c echo.Context) error {
+func (p *products) GetProductsBy(c echo.Context) error {
 
 	ctx := c.Request().Context()
 
-	products, err := p.app.GetProducts(ctx)
+	criteria := models.SearchProductsBy{}
+
+	if err := c.Bind(&criteria); err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+	}
+
+	if err := criteria.Validate(); err != nil {
+		return echo.NewHTTPError(http.StatusUnprocessableEntity, err.Error())
+	}
+
+	products, err := p.app.GetProductsBy(ctx, criteria)
 	if err != nil {
 		return err
 	}

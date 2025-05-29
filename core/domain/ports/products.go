@@ -7,9 +7,9 @@ import (
 
 type ProductsApp interface {
 	RegisterProduct(ctx context.Context) error
-	GetProducts(ctx context.Context) (*models.ProductsShops, error)
+	GetProductsBy(ctx context.Context, criteria models.SearchProductsBy) (*models.ProductsShops, error)
 }
 
 type ProductsRepo interface {
-	GetProducts(ctx context.Context) (*models.ProductsShops, error)
+	GetProductsBy(ctx context.Context, criteria models.SearchProductsBy) (*models.ProductsShops, error)
 }
