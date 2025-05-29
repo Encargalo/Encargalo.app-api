@@ -58,5 +58,12 @@ func (p *products) GetProductsBy(c echo.Context) error {
 
 func (p *products) GetCombos(c echo.Context) error {
 
-	return c.JSON(http.StatusOK, "")
+	ctx := c.Request().Context()
+
+	combos, err := p.app.GetCombos(ctx)
+	if err != nil {
+		return err
+	}
+
+	return c.JSON(http.StatusOK, combos)
 }

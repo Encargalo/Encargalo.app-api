@@ -32,3 +32,13 @@ func (p *productsApp) GetProductsBy(ctx context.Context, crieria models.SearchPr
 
 	return products, nil
 }
+
+func (p *productsApp) GetCombos(ctx context.Context) ([]models.Combos, error) {
+
+	combos, err := p.repo.GetCombos(ctx)
+	if err != nil {
+		return []models.Combos{}, err
+	}
+
+	return combos, nil
+}

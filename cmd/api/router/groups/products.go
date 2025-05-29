@@ -21,4 +21,5 @@ func NewProductsGroup(handlerProducts handler.Products) ProductsGroup {
 func (r *productsGroup) Resource(g *echo.Group) {
 	g.POST("/products", r.handlerProducts.RegisterProducts)
 	g.GET("/products", r.handlerProducts.GetProductsBy)
+	g.GET("/combos", r.handlerProducts.GetCombos)
 }
