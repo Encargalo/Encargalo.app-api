@@ -20,5 +20,6 @@ func NewProductsGroup(handlerProducts handler.Products) ProductsGroup {
 
 func (r *productsGroup) Resource(g *echo.Group) {
 	g.POST("/products", r.handlerProducts.RegisterProducts)
-	g.GET("/products/all", r.handlerProducts.GetProducts)
+	g.GET("/products/category/:category", r.handlerProducts.GetProductsByCategory)
+	g.GET("/products", r.handlerProducts.GetProductsBy)
 }
