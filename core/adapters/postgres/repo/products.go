@@ -10,7 +10,6 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
 	"github.com/uptrace/bun"
 )
@@ -45,29 +44,49 @@ func (p *productsRepo) GetProductsBy(ctx context.Context, criteria dto.SearchPro
 	return products, nil
 }
 
+// func (p *productsRepo) GetProductByCategory(ctx context.Context, category string) ([]models.Items, error) {
+
+// 	category_id := []models.Categories{}
+// 	items := []models.Items{}
+
+// 	if err := p.db.NewSelect().Model(&category_id).Where("name ILIKE ?", "%"+category+"%").
+// 		Scan(ctx); err != nil {
+// 		if errors.Is(err, sql.ErrNoRows) {
+// 			return []models.Items{}, echo.NewHTTPError(http.StatusNotFound, "category not found")
+// 		}
+// 		fmt.Println(err.Error())
+// 		return []models.Items{}, echo.NewHTTPError(http.StatusInternalServerError, "unexpected error")
+// 	}
+
+// 	ids := make([]uuid.UUID, len(category_id))
+
+// 	for i := range category_id {
+// 		ids[i] = category_id[i].ID
+// 	}
+
+// 	if err := p.db.NewSelect().
+// 		Model(&items).OrderExpr("price ASC").
+// 		Where("category_id in (?) and is_available = ?", bun.In(ids), true).
+// 		Relation("ProductsShops").
+// 		Scan(ctx); err != nil {
+// 		if errors.Is(err, sql.ErrNoRows) {
+// 			return []models.Items{}, echo.NewHTTPError(http.StatusNotFound, "products not found")
+// 		}
+// 		fmt.Println(err.Error())
+// 		return []models.Items{}, echo.NewHTTPError(http.StatusInternalServerError, "unexpected error")
+// 	}
+
+// 	return items, nil
+// }
+
 func (p *productsRepo) GetProductByCategory(ctx context.Context, category string) ([]models.Items, error) {
 
-	category_id := []models.Categories{}
 	items := []models.Items{}
 
-	if err := p.db.NewSelect().Model(&category_id).Where("LOWER(name) LIKE LOWER(?)", "%"+category+"%").
-		Scan(ctx); err != nil {
-		if errors.Is(err, sql.ErrNoRows) {
-			return []models.Items{}, echo.NewHTTPError(http.StatusNotFound, "category not found")
-		}
-		fmt.Println(err.Error())
-		return []models.Items{}, echo.NewHTTPError(http.StatusInternalServerError, "unexpected error")
-	}
-
-	ids := make([]uuid.UUID, len(category_id))
-
-	for i := range category_id {
-		ids[i] = category_id[i].ID
-	}
-
 	if err := p.db.NewSelect().
-		Model(&items).OrderExpr("price ASC").
-		Where("category_id in (?) and is_available = ?", bun.In(ids), true).
+		Model(&items).Join("left join products.categories AS c on c.id = items.category_id").
+		OrderExpr("price ASC").
+		Where("c.name ILIKE ?", "%"+category+"%").
 		Relation("ProductsShops").
 		Scan(ctx); err != nil {
 		if errors.Is(err, sql.ErrNoRows) {

@@ -36,18 +36,22 @@ func BuildContainer() *dig.Container {
 	_ = Container.Provide(groups.NewProductsGroup)
 	_ = Container.Provide(groups.NewOrdersGroup)
 	_ = Container.Provide(groups.NewPromotionsGroup)
+	_ = Container.Provide(groups.NewShopsGroup)
 
 	_ = Container.Provide(handler.NewProducts)
 	_ = Container.Provide(handler.NewOrdersHandler)
 	_ = Container.Provide(handler.NewPromos)
+	_ = Container.Provide(handler.NewShopsHandler)
 
 	_ = Container.Provide(app.NewProductsApp)
 	_ = Container.Provide(app.NewOrdersApp)
 	_ = Container.Provide(app.NewPromotionsApp)
+	_ = Container.Provide(app.NewShopsApp)
 
 	_ = Container.Provide(repo.NewProductsRepo)
 	_ = Container.Provide(repo.NewOrdersRepo)
 	_ = Container.Provide(repo.NewPromotionsRepository)
+	_ = Container.Provide(repo.NewShopsRepository)
 
 	return Container
 }
