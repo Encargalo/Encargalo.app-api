@@ -1,7 +1,6 @@
 package app
 
 import (
-	"CaliYa/core/domain/dto"
 	"CaliYa/core/domain/models"
 	"CaliYa/core/domain/ports"
 	"context"
@@ -22,16 +21,6 @@ func (p *productsApp) RegisterProduct(ctx context.Context) error {
 	// }
 
 	return nil
-}
-
-func (p *productsApp) GetProductsBy(ctx context.Context, crieria dto.SearchProductsBy) (*models.ProductsShops, error) {
-
-	products, err := p.repo.GetProductsBy(ctx, crieria)
-	if err != nil {
-		return products, err
-	}
-
-	return products, nil
 }
 
 func (p *productsApp) GetProductByCategory(ctx context.Context, category string) ([]models.Items, error) {
