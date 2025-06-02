@@ -22,6 +22,8 @@ type Items struct {
 	CreatedAt   time.Time `bun:"created_at,default:now()" json:"-"`
 	UpdatedAt   time.Time `bun:"updated_at,default:now()" json:"-"`
 	DeletedAt   time.Time `bun:"deleted_at" json:"-"`
+
+	ProductsShops ProductsShops `bun:"rel:belongs-to,join:shop_id=id" json:"shop"`
 }
 
 type ItemsOrders struct {

@@ -10,4 +10,5 @@ type Shops struct {
 
 	ID   uuid.UUID `bun:"id,pk" json:"id"`
 	Name string    `json:"name"`
+	Tag  string    `json:"tag"`
 }

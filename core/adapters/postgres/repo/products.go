@@ -1,6 +1,7 @@
 package repo
 
 import (
+	"CaliYa/core/domain/dto"
 	"CaliYa/core/domain/models"
 	"CaliYa/core/domain/ports"
 	"context"
@@ -22,7 +23,7 @@ func NewProductsRepo(db *bun.DB) ports.ProductsRepo {
 	return &productsRepo{db}
 }
 
-func (p *productsRepo) GetProductsBy(ctx context.Context, criteria models.SearchProductsBy) (*models.ProductsShops, error) {
+func (p *productsRepo) GetProductsBy(ctx context.Context, criteria dto.SearchProductsBy) (*models.ProductsShops, error) {
 
 	products := new(models.ProductsShops)
 
@@ -44,18 +45,18 @@ func (p *productsRepo) GetProductsBy(ctx context.Context, criteria models.Search
 	return products, nil
 }
 
-func (p *productsRepo) GetCombos(ctx context.Context) ([]models.Combos, error) {
+func (p *productsRepo) GetProductByCategory(ctx context.Context, category string) ([]models.Items, error) {
 
 	category_id := []models.Categories{}
-	items := []models.Combos{}
+	items := []models.Items{}
 
-	if err := p.db.NewSelect().Model(&category_id).Where("name = ?", "Combos").
+	if err := p.db.NewSelect().Model(&category_id).Where("LOWER(name) LIKE LOWER(?)", "%"+category+"%").
 		Scan(ctx); err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			return []models.Combos{}, echo.NewHTTPError(http.StatusNotFound, "products not found")
+			return []models.Items{}, echo.NewHTTPError(http.StatusNotFound, "category not found")
 		}
 		fmt.Println(err.Error())
-		return []models.Combos{}, echo.NewHTTPError(http.StatusInternalServerError, "unexpected error")
+		return []models.Items{}, echo.NewHTTPError(http.StatusInternalServerError, "unexpected error")
 	}
 
 	ids := make([]uuid.UUID, len(category_id))
@@ -70,10 +71,10 @@ func (p *productsRepo) GetCombos(ctx context.Context) ([]models.Combos, error) {
 		Relation("ProductsShops").
 		Scan(ctx); err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			return []models.Combos{}, echo.NewHTTPError(http.StatusNotFound, "products not found")
+			return []models.Items{}, echo.NewHTTPError(http.StatusNotFound, "products not found")
 		}
 		fmt.Println(err.Error())
-		return []models.Combos{}, echo.NewHTTPError(http.StatusInternalServerError, "unexpected error")
+		return []models.Items{}, echo.NewHTTPError(http.StatusInternalServerError, "unexpected error")
 	}
 
 	return items, nil

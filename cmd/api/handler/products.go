@@ -1,8 +1,9 @@
 package handler
 
 import (
-	"CaliYa/core/domain/models"
+	"CaliYa/core/domain/dto"
 	"CaliYa/core/domain/ports"
+	"fmt"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
@@ -11,7 +12,7 @@ import (
 type Products interface {
 	RegisterProducts(c echo.Context) error
 	GetProductsBy(c echo.Context) error
-	GetCombos(c echo.Context) error
+	GetProductsByCategory(c echo.Context) error
 }
 
 type products struct {
@@ -38,7 +39,7 @@ func (p *products) GetProductsBy(c echo.Context) error {
 
 	ctx := c.Request().Context()
 
-	criteria := models.SearchProductsBy{}
+	criteria := dto.SearchProductsBy{}
 
 	if err := c.Bind(&criteria); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
@@ -56,11 +57,15 @@ func (p *products) GetProductsBy(c echo.Context) error {
 	return c.JSON(http.StatusOK, products)
 }
 
-func (p *products) GetCombos(c echo.Context) error {
+func (p *products) GetProductsByCategory(c echo.Context) error {
 
 	ctx := c.Request().Context()
 
-	combos, err := p.app.GetCombos(ctx)
+	category := c.Param("category")
+
+	fmt.Println("La categoria es:", category)
+
+	combos, err := p.app.GetProductByCategory(ctx, category)
 	if err != nil {
 		return err
 	}
