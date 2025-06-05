@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
 	"github.com/uptrace/bun"
 )
@@ -39,4 +40,23 @@ func (p *productsRepo) GetProductByCategory(ctx context.Context, category string
 	}
 
 	return items, nil
+}
+
+func (p *productsRepo) GetAditionsByCategory(ctx context.Context, id uuid.UUID) ([]models.Items, error) {
+
+	adiciones := new([]models.Items)
+
+	if err := p.db.NewSelect().Model(adiciones).
+		Join("left join products.categories_adiciones as ca on items.id = ca.item_id").
+		Where("ca.category_id = ?", id).
+		Scan(ctx); err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return []models.Items{}, echo.NewHTTPError(http.StatusNotFound, "products not found")
+		}
+		fmt.Println(err.Error())
+		return []models.Items{}, echo.NewHTTPError(http.StatusInternalServerError, "unexpected error")
+
+	}
+
+	return *adiciones, nil
 }

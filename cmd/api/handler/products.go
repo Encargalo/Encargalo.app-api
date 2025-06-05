@@ -5,12 +5,14 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
 )
 
 type Products interface {
 	RegisterProducts(c echo.Context) error
 	GetProductsByCategory(c echo.Context) error
+	GetAdicionesGyCategory(c echo.Context) error
 }
 
 type products struct {
@@ -47,4 +49,18 @@ func (p *products) GetProductsByCategory(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, combos)
+}
+
+func (p *products) GetAdicionesGyCategory(c echo.Context) error {
+
+	ctx := c.Request().Context()
+
+	id := c.QueryParam("category_id")
+
+	adiciones, err := p.app.GetAditionsByCategory(ctx, uuid.MustParse(id))
+	if err != nil {
+		return err
+	}
+
+	return c.JSON(http.StatusOK, adiciones)
 }

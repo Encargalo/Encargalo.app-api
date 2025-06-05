@@ -13,7 +13,7 @@ type ProductsShops struct {
 	Tag       string    `json:"tag"`
 	LogoImage string    `bun:"logo_image" json:"logo_image"`
 	Address   string    `bun:"address" json:"address"`
-	Score     int       `bun:"score" json:"score"`
+	Score     float32   `bun:"score" json:"score"`
 	Opened    bool      `bun:"opened" json:"opened"`
 
 	Categories []Categories `bun:"rel:has-many,join:id=shop_id" json:"categories,omitempty"`

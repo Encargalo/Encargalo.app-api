@@ -29,7 +29,9 @@ func (s *shopsRepo) GetAllShops(ctx context.Context) (dto.ShopsResponse, error) 
 
 	var shops models.Shops
 
-	if err := s.db.NewSelect().Model(&shops).Order("score ASC").Where("license_status = ?", "active").Scan(ctx); err != nil {
+	if err := s.db.NewSelect().Model(&shops).Order("score DESC").
+		Where("license_status = ? and opened = ?", "active", true).
+		Scan(ctx); err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return dto.ShopsResponse{}, echo.NewHTTPError(http.StatusNotFound, "products not found")
 		}
@@ -59,7 +61,13 @@ func (p *shopsRepo) GetShopsBy(ctx context.Context, criteria dto.SearchShopsByID
 			}
 			return sq
 		}).
-		Relation("Categories").
+		Relation("Categories", func(sq *bun.SelectQuery) *bun.SelectQuery {
+			return sq.Where("name != ?", "Adiciones").OrderExpr(`
+		CASE 
+			WHEN name = 'Combos' THEN 0 
+			ELSE 1
+		END, name ASC`)
+		}).
 		Relation("Categories.Items", func(q *bun.SelectQuery) *bun.SelectQuery {
 			return q.Where("is_available = ?", true).
 				OrderExpr("price ASC")
