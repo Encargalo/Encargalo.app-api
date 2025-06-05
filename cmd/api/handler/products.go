@@ -2,7 +2,8 @@ package handler
 
 import (
 	"CaliYa/core/domain/ports"
-	"fmt"
+	calierrors "CaliYa/core/errors"
+	"errors"
 	"net/http"
 
 	"github.com/google/uuid"
@@ -41,11 +42,15 @@ func (p *products) GetProductsByCategory(c echo.Context) error {
 
 	category := c.Param("category")
 
-	fmt.Println("La categoria es:", category)
-
 	combos, err := p.app.GetProductByCategory(ctx, category)
 	if err != nil {
-		return err
+		switch {
+		case errors.Is(err, calierrors.ErrNotFound):
+			echo.NewHTTPError(http.StatusNotFound, err)
+		default:
+			echo.NewHTTPError(http.StatusInternalServerError, err)
+		}
+
 	}
 
 	return c.JSON(http.StatusOK, combos)

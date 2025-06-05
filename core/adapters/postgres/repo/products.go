@@ -3,14 +3,13 @@ package repo
 import (
 	"CaliYa/core/domain/models"
 	"CaliYa/core/domain/ports"
+	calierrors "CaliYa/core/errors"
 	"context"
 	"database/sql"
 	"errors"
 	"fmt"
-	"net/http"
 
 	"github.com/google/uuid"
-	"github.com/labstack/echo/v4"
 	"github.com/uptrace/bun"
 )
 
@@ -33,10 +32,10 @@ func (p *productsRepo) GetProductByCategory(ctx context.Context, category string
 		Relation("ProductsShops").
 		Scan(ctx); err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			return []models.Items{}, echo.NewHTTPError(http.StatusNotFound, "products not found")
+			return []models.Items{}, calierrors.ErrNotFound
 		}
 		fmt.Println(err.Error())
-		return []models.Items{}, echo.NewHTTPError(http.StatusInternalServerError, "unexpected error")
+		return []models.Items{}, calierrors.ErrUnexpected
 	}
 
 	return items, nil
@@ -51,10 +50,10 @@ func (p *productsRepo) GetAditionsByCategory(ctx context.Context, id uuid.UUID) 
 		Where("ca.category_id = ?", id).
 		Scan(ctx); err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			return []models.Items{}, echo.NewHTTPError(http.StatusNotFound, "products not found")
+			return []models.Items{}, calierrors.ErrNotFound
 		}
 		fmt.Println(err.Error())
-		return []models.Items{}, echo.NewHTTPError(http.StatusInternalServerError, "unexpected error")
+		return []models.Items{}, calierrors.ErrUnexpected
 
 	}
 
