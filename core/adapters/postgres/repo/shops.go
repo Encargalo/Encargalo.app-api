@@ -33,10 +33,10 @@ func (s *shopsRepo) GetAllShops(ctx context.Context) (dto.ShopsResponse, error) 
 		Where("license_status = ? and opened = ?", "active", true).
 		Scan(ctx); err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			return dto.ShopsResponse{}, echo.NewHTTPError(http.StatusNotFound, "products not found")
+			return dto.ShopsResponse{}, fmt.Errorf("shops %v", calierrors.ErrNotFound)
 		}
 		fmt.Println(err.Error())
-		return dto.ShopsResponse{}, echo.NewHTTPError(http.StatusInternalServerError, "unexpected error")
+		return dto.ShopsResponse{}, calierrors.ErrUnexpected
 	}
 
 	return shops.ToDomainDTO(), nil
@@ -74,9 +74,10 @@ func (p *shopsRepo) GetShopsBy(ctx context.Context, criteria dto.SearchShopsByID
 		}).
 		Scan(ctx); err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			return nil, calierrors.ErrShopNotFound
+			return nil, calierrors.ErrNotFound
 		}
-		return nil, fmt.Errorf("db scan failed: %w", err)
+		fmt.Println(err.Error())
+		return nil, calierrors.ErrUnexpected
 	}
 
 	return products, nil

@@ -3,5 +3,6 @@ package errors
 import "errors"
 
 var (
-	ErrShopNotFound = errors.New("shop not found.")
+	ErrUnexpected = errors.New("unexpected error.")
+	ErrNotFound   = errors.New("not found.")
 )

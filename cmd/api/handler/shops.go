@@ -3,7 +3,9 @@ package handler
 import (
 	"CaliYa/core/domain/dto"
 	"CaliYa/core/domain/ports"
-	calierrors "CaliYa/core/errors"
+	calierror "CaliYa/core/errors"
+	"fmt"
+
 	"errors"
 	"net/http"
 
@@ -29,7 +31,12 @@ func (s *shops) GetAllShops(c echo.Context) error {
 
 	shops, err := s.app.GetAllShops(ctx)
 	if err != nil {
-		return err
+		switch {
+		case errors.Is(err, fmt.Errorf("shops %v", calierror.ErrNotFound)):
+			return echo.NewHTTPError(http.StatusNotFound, err.Error())
+		default:
+			return echo.NewHTTPError(http.StatusInternalServerError, calierror.ErrUnexpected)
+		}
 	}
 
 	return c.JSON(http.StatusOK, shops)
@@ -52,10 +59,10 @@ func (p *shops) GetShopsBy(c echo.Context) error {
 	products, err := p.app.GetShopsBy(ctx, criteria)
 	if err != nil {
 		switch {
-		case errors.Is(err, calierrors.ErrShopNotFound):
+		case errors.Is(err, calierror.ErrNotFound):
 			return echo.NewHTTPError(http.StatusNotFound, err.Error())
 		default:
-			return echo.NewHTTPError(http.StatusInternalServerError, "internal server error")
+			return echo.NewHTTPError(http.StatusInternalServerError, calierror.ErrUnexpected)
 		}
 	}
 
