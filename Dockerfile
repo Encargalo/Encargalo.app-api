@@ -13,4 +13,5 @@ FROM alpine:latest
 RUN apk update && apk --no-cache add ca-certificates
 WORKDIR /app
 COPY --from=builder /app .
+EXPOSE 3002
 ENTRYPOINT ["./app"]
