@@ -31,8 +31,8 @@ func (o *orders) RegisterOrder(c echo.Context) error {
 	}
 
 	if err := o.app.RegisterOrders(ctx, order); err != nil {
-		return nil
+		return err
 	}
 
-	return nil
+	return c.JSON(http.StatusCreated, "order created success.")
 }

@@ -5,6 +5,10 @@ import (
 	"CaliYa/cmd/api/router/groups"
 	"net/http"
 
+	_ "CaliYa/docs"
+
+	echoSwagger "github.com/swaggo/echo-swagger"
+
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
@@ -51,6 +55,7 @@ func (r *Router) Init() {
 
 	basePath := r.server.Group("/api") //customize your basePath
 	basePath.GET("/health", handler.HealthCheck)
+	basePath.GET("/docs/*", echoSwagger.EchoWrapHandler())
 
 	r.productsGroup.Resource(basePath)
 	r.orderGroup.Resource(basePath)

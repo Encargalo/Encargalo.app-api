@@ -6,7 +6,7 @@ import (
 )
 
 type ProductsShops struct {
-	bun.BaseModel `bun:"table:business.shops"`
+	bun.BaseModel `bun:"table:business.shops" swaggerignore:"true"`
 
 	ID        uuid.UUID `bun:"id,pk,type:uuid,default:uuid_generate_v4()" json:"id"`
 	Name      string    `bun:"name" json:"name"`

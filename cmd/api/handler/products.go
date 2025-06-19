@@ -36,13 +36,22 @@ func (p *products) RegisterProducts(c echo.Context) error {
 	return c.JSON(http.StatusOK, "ok")
 }
 
+// GetProductByCategory godoc
+// @Tags Products
+// @Summary End Point para obtener todos los productos de una misma categoria.
+// @Produce json
+// @Param category path string true "Este es el nombre de la categoria ej:/products/category/hamburguesas"
+// @Success 200 {object} []models.Items
+// @Failure 404
+// @Failure 500
+// @Router /products/category/{category} [get]
 func (p *products) GetProductsByCategory(c echo.Context) error {
 
 	ctx := c.Request().Context()
 
 	category := c.Param("category")
 
-	combos, err := p.app.GetProductByCategory(ctx, category)
+	items, err := p.app.GetProductByCategory(ctx, category)
 	if err != nil {
 		switch {
 		case errors.Is(err, calierrors.ErrNotFound):
@@ -53,9 +62,18 @@ func (p *products) GetProductsByCategory(c echo.Context) error {
 
 	}
 
-	return c.JSON(http.StatusOK, combos)
+	return c.JSON(http.StatusOK, items)
 }
 
+// GetAdicionesGyCategory godoc
+// @Tags Products
+// @Summary End Point para obtener todos las adiciones de una misma categoria.
+// @Produce json
+// @Param category_id query string true "Este es el id de la categoria, debe ser formato UUID"
+// @Success 200 {object} []models.Items
+// @Failure 404
+// @Failure 500
+// @Router /products/adiciones [get]
 func (p *products) GetAdicionesGyCategory(c echo.Context) error {
 
 	ctx := c.Request().Context()

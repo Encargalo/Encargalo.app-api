@@ -9,7 +9,7 @@ import (
 )
 
 type Items struct {
-	bun.BaseModel `bun:"table:products.items"`
+	bun.BaseModel `bun:"table:products.items" swaggerignore:"true"`
 
 	ID          uuid.UUID `bun:"id,pk,type:uuid,default:uuid_generate_v4()" json:"id"`
 	ShopID      uuid.UUID `bun:"shop_id" json:"shop_id"`
@@ -27,14 +27,14 @@ type Items struct {
 }
 
 type ItemsOrders struct {
-	bun.BaseModel `bun:"table:business.order_items"`
+	bun.BaseModel `bun:"table:business.order_items" swaggerignore:"true"`
 
-	ItemID      uuid.UUID `bun:"item_id" json:"item_id" validate:"required,uuid4" mold:"trim"`
-	OrderID     uuid.UUID `bun:"order_id"`
-	CantItem    int       `bun:"cant_item" json:"cant_item" validate:"required" mold:"trim"`
-	UnitPrice   int       `bun:"unit_price"`
-	TotalPrice  int       `bun:"total_price"`
-	Observation string    `bun:"observation" json:"observation"`
+	ItemID      uuid.UUID `bun:"item_id" json:"item_id" validate:"required,uuid4" mold:"trim" example:"9ad8b85b-b847-4f15-a0ce-6415b7e335f0"`
+	OrderID     uuid.UUID `bun:"order_id" swaggerignore:"true"`
+	CantItem    int       `bun:"cant_item" json:"cant_item" validate:"required" mold:"trim" example:"2"`
+	UnitPrice   int       `bun:"unit_price" swaggerignore:"true"`
+	TotalPrice  int       `bun:"total_price" swaggerignore:"true"`
+	Observation string    `bun:"observation" json:"observation" example:"Con todas las salsas."`
 }
 
 func (io *ItemsOrders) Validate() error {
