@@ -12,17 +12,18 @@
     "paths": {
         "/products/adiciones": {
             "get": {
+                "description": "Devuelve la lista de adiciones filtradas por el ID de la categoría a la que pertenece un producto.",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "Products"
                 ],
-                "summary": "End Point para obtener todos las adiciones de una misma categoria.",
+                "summary": "Se obtienen las adiciones por categoría.",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Este es el id de la categoria, debe ser formato UUID",
+                        "description": "ID de la categoría (UUID)",
                         "name": "category_id",
                         "in": "query",
                         "required": true
@@ -49,13 +50,14 @@
         },
         "/products/category/{category}": {
             "get": {
+                "description": "Se obtiene una lista de productos filtradas por el nombre de una categoria, tambien puede ser una similitud, ej:Si se busca la palabra hamb, obtendrá hamburguesas o otra categoría similar.",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "Products"
                 ],
-                "summary": "End Point para obtener todos los productos de una misma categoria.",
+                "summary": "Se obtienen todos los productos de una misma categoria.",
                 "parameters": [
                     {
                         "type": "string",

@@ -81,8 +81,10 @@ info:
 paths:
   /products/adiciones:
     get:
+      description: Devuelve la lista de adiciones filtradas por el ID de la categoría
+        a la que pertenece un producto.
       parameters:
-      - description: Este es el id de la categoria, debe ser formato UUID
+      - description: ID de la categoría (UUID)
         in: query
         name: category_id
         required: true
@@ -100,11 +102,14 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      summary: End Point para obtener todos las adiciones de una misma categoria.
+      summary: Se obtienen las adiciones por categoría.
       tags:
       - Products
   /products/category/{category}:
     get:
+      description: Se obtiene una lista de productos filtradas por el nombre de una
+        categoria, tambien puede ser una similitud, ej:Si se busca la palabra hamb,
+        obtendrá hamburguesas o otra categoría similar.
       parameters:
       - description: Este es el nombre de la categoria ej:/products/category/hamburguesas
         in: path
@@ -124,7 +129,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      summary: End Point para obtener todos los productos de una misma categoria.
+      summary: Se obtienen todos los productos de una misma categoria.
       tags:
       - Products
   /shops:

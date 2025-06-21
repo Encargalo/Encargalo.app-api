@@ -42,20 +42,25 @@ func (p *productsRepo) GetProductByCategory(ctx context.Context, category string
 }
 
 func (p *productsRepo) GetAditionsByCategory(ctx context.Context, id uuid.UUID) ([]models.Items, error) {
+	adiciones := []models.Items{}
 
-	adiciones := new([]models.Items)
-
-	if err := p.db.NewSelect().Model(adiciones).
+	err := p.db.NewSelect().Model(&adiciones).
 		Join("left join products.categories_adiciones as ca on items.id = ca.item_id").
 		Where("ca.category_id = ?", id).
-		Scan(ctx); err != nil {
-		if errors.Is(err, sql.ErrNoRows) {
-			return []models.Items{}, calierrors.ErrNotFound
-		}
+		Scan(ctx)
+	if err != nil {
 		fmt.Println(err.Error())
-		return []models.Items{}, calierrors.ErrUnexpected
-
+		return nil, calierrors.ErrUnexpected
 	}
 
-	return *adiciones, nil
+	fmt.Println("Evalua el error")
+	// Revisar si el resultado está vacío
+	if len(adiciones) == 0 {
+		fmt.Println("Retorna el error.")
+		return nil, calierrors.ErrNotFound
+	}
+
+	fmt.Println("No retorna el error.")
+
+	return adiciones, nil
 }

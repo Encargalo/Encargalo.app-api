@@ -38,7 +38,8 @@ func (p *products) RegisterProducts(c echo.Context) error {
 
 // GetProductByCategory godoc
 // @Tags Products
-// @Summary End Point para obtener todos los productos de una misma categoria.
+// @Summary Se obtienen todos los productos de una misma categoria.
+// @Description Se obtiene una lista de productos filtradas por el nombre de una categoria, tambien puede ser una similitud, ej:Si se busca la palabra hamb, obtendrá hamburguesas o otra categoría similar.
 // @Produce json
 // @Param category path string true "Este es el nombre de la categoria ej:/products/category/hamburguesas"
 // @Success 200 {object} []models.Items
@@ -59,17 +60,17 @@ func (p *products) GetProductsByCategory(c echo.Context) error {
 		default:
 			echo.NewHTTPError(http.StatusInternalServerError, err)
 		}
-
 	}
 
 	return c.JSON(http.StatusOK, items)
 }
 
 // GetAdicionesGyCategory godoc
+// @Summary Se obtienen las adiciones por categoría.
+// @Description Devuelve la lista de adiciones filtradas por el ID de la categoría a la que pertenece un producto.
 // @Tags Products
-// @Summary End Point para obtener todos las adiciones de una misma categoria.
 // @Produce json
-// @Param category_id query string true "Este es el id de la categoria, debe ser formato UUID"
+// @Param category_id query string true "ID de la categoría (UUID)"
 // @Success 200 {object} []models.Items
 // @Failure 404
 // @Failure 500
@@ -82,7 +83,12 @@ func (p *products) GetAdicionesGyCategory(c echo.Context) error {
 
 	adiciones, err := p.app.GetAditionsByCategory(ctx, uuid.MustParse(id))
 	if err != nil {
-		return err
+		switch {
+		case errors.Is(err, calierrors.ErrNotFound):
+			return echo.NewHTTPError(http.StatusNotFound, err)
+		default:
+			return echo.NewHTTPError(http.StatusInternalServerError, err)
+		}
 	}
 
 	return c.JSON(http.StatusOK, adiciones)
