@@ -1,10 +1,11 @@
 package app
 
 import (
-	"CaliYa/core/domain/dto"
 	"CaliYa/core/domain/models"
 	"CaliYa/core/domain/ports"
 	"context"
+
+	"github.com/google/uuid"
 )
 
 type productsApp struct {
@@ -24,22 +25,10 @@ func (p *productsApp) RegisterProduct(ctx context.Context) error {
 	return nil
 }
 
-func (p *productsApp) GetProductsBy(ctx context.Context, crieria dto.SearchProductsBy) (*models.ProductsShops, error) {
-
-	products, err := p.repo.GetProductsBy(ctx, crieria)
-	if err != nil {
-		return products, err
-	}
-
-	return products, nil
+func (p *productsApp) GetProductByCategory(ctx context.Context, category string) ([]models.Items, error) {
+	return p.repo.GetProductByCategory(ctx, category)
 }
 
-func (p *productsApp) GetProductByCategory(ctx context.Context, category string) ([]models.Items, error) {
-
-	combos, err := p.repo.GetProductByCategory(ctx, category)
-	if err != nil {
-		return []models.Items{}, err
-	}
-
-	return combos, nil
+func (p *productsApp) GetAditionsByCategory(ctx context.Context, id uuid.UUID) ([]models.Items, error) {
+	return p.repo.GetAditionsByCategory(ctx, id)
 }

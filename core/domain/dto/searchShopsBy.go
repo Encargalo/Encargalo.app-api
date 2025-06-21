@@ -13,11 +13,12 @@ var (
 	conform  = modifiers.New()
 )
 
-type SearchProductsBy struct {
-	ShopID uuid.UUID `json:"shop_id" query:"shop_id" validate:"uuid4"`
+type SearchShopsByID struct {
+	ID  uuid.UUID `query:"id"`
+	Tag string    `query:"tag"`
 }
 
-func (s *SearchProductsBy) Validate() error {
-	_ = conform.Struct(context.TODO(), s)
+func (s *SearchShopsByID) Validate() error {
+	_ = conform.Struct(context.Background(), s)
 	return validate.Struct(s)
 }

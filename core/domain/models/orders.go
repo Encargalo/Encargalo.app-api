@@ -15,12 +15,12 @@ var (
 )
 
 type Order struct {
-	bun.BaseModel `bun:"table:business.orders"`
+	bun.BaseModel `bun:"table:business.orders" swaggerignore:"true"`
 
-	ID          uuid.UUID `bun:"id,pk,type:uuid"`
-	ShopID      uuid.UUID `bun:"shop_id" json:"shop_id" validate:"required,uuid4" mold:"trim"`
-	CustomerID  uuid.UUID `bun:"customer_id" json:"customer_id" validate:"required,uuid4" mold:"trim"`
-	Total_Price int       `bun:"total_price"`
+	ID          uuid.UUID `bun:"id,pk,type:uuid" swaggerignore:"true"`
+	ShopID      uuid.UUID `bun:"shop_id" json:"shop_id" validate:"required,uuid4" mold:"trim" example:"0936ea77-72b8-46eb-b80c-c8c22386a0fb"`
+	CustomerID  uuid.UUID `bun:"customer_id" json:"customer_id" validate:"required,uuid4" mold:"trim" example:"84ad5b8c-7877-4a60-b0a1-c6545f6a1344"`
+	Total_Price int       `bun:"total_price" swaggerignore:"true"`
 
 	ItemsOrders []ItemsOrders `bun:"rel:has-many,join:id=order_id" json:"items_order" validate:"required"`
 }

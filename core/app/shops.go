@@ -2,6 +2,7 @@ package app
 
 import (
 	"CaliYa/core/domain/dto"
+	"CaliYa/core/domain/models"
 	"CaliYa/core/domain/ports"
 	"context"
 )
@@ -22,4 +23,8 @@ func (s *shopsApp) GetAllShops(ctx context.Context) (dto.ShopsResponse, error) {
 	}
 
 	return shops, nil
+}
+
+func (p *shopsApp) GetShopsBy(ctx context.Context, criteria dto.SearchShopsByID) (*models.ProductsShops, error) {
+	return p.repo.GetShopsBy(ctx, criteria)
 }

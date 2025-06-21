@@ -19,5 +19,6 @@ func NewShopsGroup(handlerShops handler.Shops) ShopsGroup {
 }
 
 func (s *shopGroup) Resource(g *echo.Group) {
-	g.GET("/shops", s.handlerShops.GetAllShops)
+	g.GET("/shops/all", s.handlerShops.GetAllShops)
+	g.GET("/shops", s.handlerShops.GetShopsBy)
 }
