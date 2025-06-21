@@ -53,7 +53,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/products/category/{category}": {
+        "/products/category": {
             "get": {
                 "description": "Se obtiene una lista de productos filtradas por el nombre de una categoria, tambien puede ser una similitud, ej:Si se busca la palabra hamb, obtendrá hamburguesas o otra categoría similar.",
                 "produces": [
@@ -66,9 +66,9 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Este es el nombre de la categoria ej:/products/category/hamburguesas",
+                        "description": "Este es el nombre de la categoria ej:/products/category/?category=hamburguesas",
                         "name": "category",
-                        "in": "path",
+                        "in": "query",
                         "required": true
                     }
                 ],
@@ -82,11 +82,23 @@ const docTemplate = `{
                             }
                         }
                     },
+                    "400": {
+                        "description": "Se retorna cuando cuando el valor es vacio o el valor es menor a 3 digitos.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
                     "404": {
-                        "description": "Not Found"
+                        "description": "Se retorna cuando no se encuentra una concidencia en la busqueda.",
+                        "schema": {
+                            "type": "string"
+                        }
                     },
                     "500": {
-                        "description": "Internal Server Error"
+                        "description": "Se retorna cuando ocurre un error inexperado en el servidor.",
+                        "schema": {
+                            "type": "string"
+                        }
                     }
                 }
             }

@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"CaliYa/core/domain/dto"
 	"CaliYa/core/domain/ports"
 	calierrors "CaliYa/core/errors"
 	"errors"
@@ -41,18 +42,27 @@ func (p *products) RegisterProducts(c echo.Context) error {
 // @Summary Se obtienen todos los productos de una misma categoria.
 // @Description Se obtiene una lista de productos filtradas por el nombre de una categoria, tambien puede ser una similitud, ej:Si se busca la palabra hamb, obtendrá hamburguesas o otra categoría similar.
 // @Produce json
-// @Param category path string true "Este es el nombre de la categoria ej:/products/category/hamburguesas"
+// @Param category query string true "Este es el nombre de la categoria ej:/products/category/?category=hamburguesas"
 // @Success 200 {object} []models.Items
-// @Failure 404
-// @Failure 500
-// @Router /products/category/{category} [get]
+// @Failure 400 {string} string "Se retorna cuando cuando el valor es vacio o el valor es menor a 3 digitos."
+// @Failure 404 {string} string "Se retorna cuando no se encuentra una concidencia en la busqueda."
+// @Failure 500 {string} string "Se retorna cuando ocurre un error inexperado en el servidor."
+// @Router /products/category [get]
 func (p *products) GetProductsByCategory(c echo.Context) error {
 
 	ctx := c.Request().Context()
 
-	category := c.Param("category")
+	category := dto.SearchProductsByCategory{}
 
-	items, err := p.app.GetProductByCategory(ctx, category)
+	if err := c.Bind(&category); err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+	}
+
+	if err := category.IsValid(); err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+	}
+
+	items, err := p.app.GetProductByCategory(ctx, category.Category)
 	if err != nil {
 		switch {
 		case errors.Is(err, calierrors.ErrNotFound):
