@@ -6,7 +6,6 @@ require (
 	github.com/andresxlp/gosuite v1.0.0
 	github.com/go-playground/mold v2.2.0+incompatible
 	github.com/google/uuid v1.4.0
-	github.com/labstack/echo v3.3.10+incompatible
 	github.com/labstack/echo/v4 v4.13.3
 	github.com/stretchr/testify v1.10.0
 	github.com/swaggo/echo-swagger v1.4.1

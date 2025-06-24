@@ -10,3 +10,7 @@ packages:
   CaliYa/cmd/api/handler:
     config:
     dir: "mocks/cmd/api/handler"
+
+  CaliYa/core/domain/ports:
+    config:
+    dir: "mocks/core/domain/ports"

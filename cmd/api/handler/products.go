@@ -66,9 +66,9 @@ func (p *products) GetProductsByCategory(c echo.Context) error {
 	if err != nil {
 		switch {
 		case errors.Is(err, calierrors.ErrNotFound):
-			echo.NewHTTPError(http.StatusNotFound, err)
+			return echo.NewHTTPError(http.StatusNotFound, err.Error())
 		default:
-			echo.NewHTTPError(http.StatusInternalServerError, err)
+			return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 		}
 	}
 
