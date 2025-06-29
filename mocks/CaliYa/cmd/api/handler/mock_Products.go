@@ -13,12 +13,12 @@ type Products struct {
 	mock.Mock
 }
 
-// GetAdicionesGyCategory provides a mock function with given fields: c
-func (_m *Products) GetAdicionesGyCategory(c echo.Context) error {
+// GetAdicionesByCategory provides a mock function with given fields: c
+func (_m *Products) GetAdicionesByCategory(c echo.Context) error {
 	ret := _m.Called(c)
 
 	if len(ret) == 0 {
-		panic("no return value specified for GetAdicionesGyCategory")
+		panic("no return value specified for GetAdicionesByCategory")
 	}
 
 	var r0 error

@@ -11,6 +11,7 @@ import (
 	"net/http"
 	"testing"
 
+	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/suite"
 
@@ -30,6 +31,10 @@ var (
 
 	queryCategoryIsValid = dto.SearchProductsByCategory{
 		Category: "7bcceb44-fa9c-4451-8b5b-ab36f90fa95d",
+	}
+
+	paramCategoryIDIsValid = dto.Category{
+		ID: uuid.New(),
 	}
 )
 
@@ -54,8 +59,13 @@ func (suite *ProductsSuiteTest) TestGetProductsByCategory_WhenBindFail() {
 	controller := SetupControllerCase("/api/products/category?category=", http.MethodGet, bytes.NewBuffer(body))
 
 	err := suite.underTest.GetProductsByCategory(controller.Ctx)
-	suite.Contains(err.Error(), "400")
-	suite.Error(err)
+
+	httpErr, ok := err.(*echo.HTTPError)
+
+	suite.True(ok, "el error debería ser tipo *echo.HTTPError")
+
+	suite.Equal(http.StatusBadRequest, httpErr.Code)
+	suite.Equal("bad request", httpErr.Message)
 
 }
 
@@ -139,4 +149,37 @@ func (suite *ProductsSuiteTest) TestGetProductsByCategory_WhenSuccess() {
 	suite.NoError(err)
 
 	suite.Equal(http.StatusOK, controller.Res.Code)
+}
+
+func (suite *ProductsSuiteTest) TestGetAdicionesGyCategory_WhenBindFail() {
+
+	body, _ := json.Marshal(paramCategoryIDIsValid)
+	controller := SetupControllerCase("/api/products/adiciones?category_id=", http.MethodGet, bytes.NewBuffer(body))
+
+	err := suite.underTest.GetAdicionesByCategory(controller.Ctx)
+	httpErr, ok := err.(*echo.HTTPError)
+
+	suite.True(ok, "el error debería ser tipo *echo.HTTPError")
+
+	suite.Equal(http.StatusBadRequest, httpErr.Code)
+	suite.Equal("bad request", httpErr.Message)
+
+}
+
+func (suite *ProductsSuiteTest) TestGetAdicionesByCategory_WhenNotFound() {
+
+	body, _ := json.Marshal(paramCategoryIDIsValid)
+	controller := SetupControllerCase("/api/products/adiciones?category_id=", http.MethodGet, bytes.NewBuffer(body))
+
+	suite.service.Mock.On("GetAditionsByCategory", ctx, paramCategoryIDIsValid.ID).
+		Return([]models.Items{}, calierrors.ErrNotFound)
+
+	err := suite.underTest.GetAdicionesByCategory(controller.Ctx)
+	httpErr, ok := err.(*echo.HTTPError)
+
+	suite.True(ok, "el error debería ser tipo *echo.HTTPError")
+
+	suite.Equal(http.StatusNotFound, httpErr.Code)
+	suite.Equal("not found.", httpErr.Message)
+
 }

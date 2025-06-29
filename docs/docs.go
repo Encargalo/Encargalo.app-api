@@ -44,11 +44,23 @@ const docTemplate = `{
                             }
                         }
                     },
+                    "400": {
+                        "description": "Se retorna cuando el param se envía vacío o no es un UUID Valido.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
                     "404": {
-                        "description": "Not Found"
+                        "description": "Se retorna cuando no se encuentran ninguna adición para el category_id enviada.",
+                        "schema": {
+                            "type": "string"
+                        }
                     },
                     "500": {
-                        "description": "Internal Server Error"
+                        "description": "Se retorna cuando ocurre un error inesperado dentro del servidor.",
+                        "schema": {
+                            "type": "string"
+                        }
                     }
                 }
             }
