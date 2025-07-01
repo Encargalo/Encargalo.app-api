@@ -34,7 +34,6 @@ func (o *orders) RegisterOrders(ctx context.Context, order *models.Order) error 
 		return fmt.Errorf("error insertando items: %w", err)
 	}
 
-	// Confirmar transacción
 	if err := tx.Commit(); err != nil {
 		return fmt.Errorf("error al confirmar transacción: %w", err)
 	}
