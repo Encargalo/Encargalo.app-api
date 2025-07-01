@@ -21,18 +21,18 @@ func NewCustomersRepo(db *bun.DB) ports.CustomersRepo {
 	return &customersRepo{db}
 }
 
-func (c *customersRepo) RegisterCustomer(ctx context.Context, customer *models.Accounts) error {
+func (c *customersRepo) RegisterCustomer(ctx context.Context, customer *models.Accounts) (*models.ActivateAccount, error) {
 
 	tx, err := c.db.BeginTx(ctx, nil)
 	if err != nil {
 		fmt.Println("error iniciando transacción: %w", err)
-		return errors.ErrUnexpected
+		return nil, errors.ErrUnexpected
 	}
 
 	if _, err := tx.NewInsert().Model(customer).Returning("id").Exec(ctx); err != nil {
 		_ = tx.Rollback()
 		fmt.Println("error al insertar el customer")
-		return errors.ErrUnexpected
+		return nil, errors.ErrUnexpected
 	}
 
 	activationAccount := new(models.ActivateAccount)
@@ -41,15 +41,15 @@ func (c *customersRepo) RegisterCustomer(ctx context.Context, customer *models.A
 	if _, err := tx.NewInsert().Model(activationAccount).Exec(ctx); err != nil {
 		_ = tx.Rollback()
 		fmt.Println("error al registrar el codigo de activación")
-		return errors.ErrUnexpected
+		return nil, errors.ErrUnexpected
 	}
 
 	if err := tx.Commit(); err != nil {
 		fmt.Println("error al confirmar transacción: %w", err)
-		return errors.ErrUnexpected
+		return nil, errors.ErrUnexpected
 	}
 
-	return nil
+	return activationAccount, nil
 }
 
 func (c *customersRepo) SearchCustomerBy(ctx context.Context, criteria dto.SearchCustomerBy) (*models.Accounts, error) {

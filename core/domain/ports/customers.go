@@ -12,6 +12,6 @@ type CustomersApp interface {
 }
 
 type CustomersRepo interface {
-	RegisterCustomer(ctx context.Context, customer *models.Accounts) error
+	RegisterCustomer(ctx context.Context, customer *models.Accounts) (*models.ActivateAccount, error)
 	SearchCustomerBy(ctx context.Context, criteria dto.SearchCustomerBy) (*models.Accounts, error)
 }

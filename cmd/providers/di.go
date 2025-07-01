@@ -8,6 +8,7 @@ import (
 	"CaliYa/core/adapters/mongo"
 	"CaliYa/core/adapters/postgres"
 	"CaliYa/core/adapters/postgres/repo"
+	adapters "CaliYa/core/adapters/twilio"
 	"CaliYa/core/app"
 	"CaliYa/core/utils"
 
@@ -31,6 +32,7 @@ func BuildContainer() *dig.Container {
 
 	_ = Container.Provide(postgres.NewPostgresConnection)
 	_ = Container.Provide(mongo.NewMongoConnection)
+	_ = Container.Provide(adapters.NewTwilioClient)
 
 	_ = Container.Provide(router.New)
 

@@ -4,22 +4,24 @@ import (
 	dto "CaliYa/core/domain/dto/customers"
 	models "CaliYa/core/domain/models/customers"
 	"CaliYa/core/domain/ports"
+	"CaliYa/core/errors"
 	"CaliYa/core/utils"
 	"context"
-	"fmt"
 
-	"github.com/google/uuid"
+	"fmt"
 )
 
 type customersApp struct {
 	repo ports.CustomersRepo
 	pass utils.Password
+	msg  ports.MessageSender
 }
 
-func NewCustomerApp(repo ports.CustomersRepo, pass utils.Password) ports.CustomersApp {
+func NewCustomerApp(repo ports.CustomersRepo, pass utils.Password, msg ports.MessageSender) ports.CustomersApp {
 	return &customersApp{
 		repo,
 		pass,
+		msg,
 	}
 }
 
@@ -27,10 +29,12 @@ func (c *customersApp) RegisterCustomer(ctx context.Context, customer dto.Regist
 
 	custo, err := c.SearchCustomerBy(ctx, dto.SearchCustomerBy{Phone: customer.Phone})
 	if err != nil {
-		return err
+		if err == errors.ErrUnexpected {
+			return err
+		}
 	}
 
-	if custo.ID != uuid.Nil {
+	if custo != nil {
 		return fmt.Errorf("phone al ready exist")
 	}
 
@@ -39,9 +43,12 @@ func (c *customersApp) RegisterCustomer(ctx context.Context, customer dto.Regist
 	customerModel := models.Accounts{}
 	customerModel.BuildCustomerRegisterModel(customer)
 
-	if err := c.repo.RegisterCustomer(ctx, &customerModel); err != nil {
+	activateAccount, err := c.repo.RegisterCustomer(ctx, &customerModel)
+	if err != nil {
 		return err
 	}
+
+	go c.msg.SendCodeToConfirmPhone(customerModel.Phone, customerModel.Name, activateAccount.ActivationCode)
 
 	return nil
 }
