@@ -2,6 +2,14 @@ package dto
 
 import (
 	"context"
+
+	"github.com/go-playground/mold/modifiers"
+	"github.com/go-playground/validator/v10"
+)
+
+var (
+	validate = validator.New()
+	conform  = modifiers.New()
 )
 
 type RegisterCustomer struct {

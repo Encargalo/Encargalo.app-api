@@ -1,6 +1,7 @@
 package repo
 
 import (
+	dto "CaliYa/core/domain/dto/customers"
 	models "CaliYa/core/domain/models/customers"
 	"CaliYa/core/domain/ports"
 	"CaliYa/core/errors"
@@ -8,6 +9,7 @@ import (
 	"database/sql"
 	"fmt"
 
+	"github.com/google/uuid"
 	"github.com/uptrace/bun"
 )
 
@@ -23,12 +25,14 @@ func (c *customersRepo) RegisterCustomer(ctx context.Context, customer *models.A
 
 	tx, err := c.db.BeginTx(ctx, nil)
 	if err != nil {
-		return fmt.Errorf("error iniciando transacción: %w", err)
+		fmt.Println("error iniciando transacción: %w", err)
+		return errors.ErrUnexpected
 	}
 
 	if _, err := tx.NewInsert().Model(customer).Returning("id").Exec(ctx); err != nil {
 		_ = tx.Rollback()
-		return fmt.Errorf("error al insertar el customer")
+		fmt.Println("error al insertar el customer")
+		return errors.ErrUnexpected
 	}
 
 	activationAccount := new(models.ActivateAccount)
@@ -36,23 +40,33 @@ func (c *customersRepo) RegisterCustomer(ctx context.Context, customer *models.A
 
 	if _, err := tx.NewInsert().Model(activationAccount).Exec(ctx); err != nil {
 		_ = tx.Rollback()
-		return fmt.Errorf("error al registrar el codigo de activación")
+		fmt.Println("error al registrar el codigo de activación")
+		return errors.ErrUnexpected
 	}
 
 	if err := tx.Commit(); err != nil {
-		return fmt.Errorf("error al confirmar transacción: %w", err)
+		fmt.Println("error al confirmar transacción: %w", err)
+		return errors.ErrUnexpected
 	}
 
 	return nil
 }
 
-func (c *customersRepo) SearchCustomerByPhone(ctx context.Context, phone string) (*models.Accounts, error) {
+func (c *customersRepo) SearchCustomerBy(ctx context.Context, criteria dto.SearchCustomerBy) (*models.Accounts, error) {
 
 	account := new(models.Accounts)
 
 	err := c.db.NewSelect().
 		Model(account).
-		Where("phone = ?", phone).
+		WhereGroup("or", func(sq *bun.SelectQuery) *bun.SelectQuery {
+			if criteria.ID != uuid.Nil {
+				sq = sq.Where("id = ?", criteria.ID)
+			}
+			if criteria.Phone != "" {
+				sq = sq.Where("phone = ?", criteria.Phone)
+			}
+			return sq
+		}).
 		Where("deleted_at IS NULL").
 		Relation("Addresses").
 		Scan(ctx)

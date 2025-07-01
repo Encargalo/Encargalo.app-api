@@ -1,11 +1,14 @@
 package app
 
 import (
-	"CaliYa/core/domain/dto"
+	dto "CaliYa/core/domain/dto/customers"
 	models "CaliYa/core/domain/models/customers"
 	"CaliYa/core/domain/ports"
 	"CaliYa/core/utils"
 	"context"
+	"fmt"
+
+	"github.com/google/uuid"
 )
 
 type customersApp struct {
@@ -22,6 +25,15 @@ func NewCustomerApp(repo ports.CustomersRepo, pass utils.Password) ports.Custome
 
 func (c *customersApp) RegisterCustomer(ctx context.Context, customer dto.RegisterCustomer) error {
 
+	custo, err := c.SearchCustomerBy(ctx, dto.SearchCustomerBy{Phone: customer.Phone})
+	if err != nil {
+		return err
+	}
+
+	if custo.ID != uuid.Nil {
+		return fmt.Errorf("phone al ready exist")
+	}
+
 	c.pass.HashPassword(&customer.Password)
 
 	customerModel := models.Accounts{}
@@ -32,4 +44,15 @@ func (c *customersApp) RegisterCustomer(ctx context.Context, customer dto.Regist
 	}
 
 	return nil
+}
+
+func (c *customersApp) SearchCustomerBy(ctx context.Context, criteria dto.SearchCustomerBy) (*models.Accounts, error) {
+
+	customer, err := c.repo.SearchCustomerBy(ctx, criteria)
+	if err != nil {
+		return nil, err
+	}
+
+	return customer, nil
+
 }

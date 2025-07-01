@@ -1,7 +1,7 @@
 package models
 
 import (
-	"CaliYa/core/domain/dto"
+	dto "CaliYa/core/domain/dto/customers"
 	"time"
 
 	"github.com/google/uuid"

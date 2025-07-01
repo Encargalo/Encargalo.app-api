@@ -1,8 +1,9 @@
 package handler
 
 import (
-	"CaliYa/core/domain/dto"
+	dto "CaliYa/core/domain/dto/customers"
 	"CaliYa/core/domain/ports"
+	"errors"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
@@ -43,8 +44,14 @@ func (c *customersHandler) RegisterCusrtomers(e echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
-	if err := c.customerApp.RegisterCustomer(ctx, customer); err != nil {
-		return err
+	err := c.customerApp.RegisterCustomer(ctx, customer)
+	if err != nil {
+		switch {
+		case errors.Is(err, errors.New("phone al readys exist")):
+			return echo.NewHTTPError(http.StatusConflict, err.Error())
+		default:
+			return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+		}
 	}
 
 	return e.JSON(http.StatusCreated, "customer successfully registered")
