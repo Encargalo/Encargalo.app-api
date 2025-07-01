@@ -31,7 +31,7 @@ func (t *twilioClient) SendCodeToConfirmPhone(to, name, code string) error {
 	params := &twilioApi.CreateMessageParams{}
 	params.SetTo("whatsapp:" + to)
 	params.SetFrom("whatsapp:" + config.Get().Twilio.Phone)
-	params.SetBody(fmt.Sprintf("Hola %s \n\n Su codigo de confirmacion es: %s \n\n Gracias por elegir a	 caliya.app", name, code))
+	params.SetBody(fmt.Sprintf("Hola %s \n\n Su codigo de confirmacion es: %s \n\n Gracias por elegir a caliya.app", name, code))
 
 	resp, err := t.client.Api.CreateMessage(params)
 	if err != nil {
