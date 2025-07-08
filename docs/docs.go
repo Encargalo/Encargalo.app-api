@@ -230,12 +230,17 @@ const docTemplate = `{
         "dto.RegisterCustomer": {
             "type": "object",
             "required": [
+                "birthday_date",
                 "name",
                 "password",
                 "phone",
                 "sur_name"
             ],
             "properties": {
+                "birthday_date": {
+                    "type": "string",
+                    "example": "1990-05-20"
+                },
                 "email": {
                     "type": "string",
                     "example": "carlos.ramirez@example.com"
