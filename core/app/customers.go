@@ -14,14 +14,12 @@ import (
 type customersApp struct {
 	repo ports.CustomersRepo
 	pass utils.Password
-	msg  ports.MessageSender
 }
 
-func NewCustomerApp(repo ports.CustomersRepo, pass utils.Password, msg ports.MessageSender) ports.CustomersApp {
+func NewCustomerApp(repo ports.CustomersRepo, pass utils.Password) ports.CustomersApp {
 	return &customersApp{
 		repo,
 		pass,
-		msg,
 	}
 }
 
@@ -43,12 +41,10 @@ func (c *customersApp) RegisterCustomer(ctx context.Context, customer dto.Regist
 	customerModel := models.Accounts{}
 	customerModel.BuildCustomerRegisterModel(customer)
 
-	activateAccount, err := c.repo.RegisterCustomer(ctx, &customerModel)
+	_, err = c.repo.RegisterCustomer(ctx, &customerModel)
 	if err != nil {
 		return err
 	}
-
-	go c.msg.SendCodeToConfirmPhone(customerModel.Phone, customerModel.Name, activateAccount.ActivationCode)
 
 	return nil
 }

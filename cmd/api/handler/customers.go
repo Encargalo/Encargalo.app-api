@@ -26,9 +26,10 @@ func NewCustomersHandler(customerApp ports.CustomersApp) CustomersHandler {
 // @Description  Registrar un nuevo cliente en el sistema con los datos proporcionados. Valida campos obligatorios como nombre, teléfono y contraseña.
 // @Tags         Customers
 // @Accept       json
-// @Produce      json
 // @Param        customer  body  dto.RegisterCustomer  true  "Datos del cliente"
 // @Success      201  {string}  string  "customer successfully registered"
+// @Failure      400 {string} string "Se retorna cuando hay un campo que no cumple con los requisitos o directamente el body se envía vacío."
+// @Failure      500 {string} string "Se retorna cuando ocurre un error inexperado en el servidor."
 // @Router       /customers [post]
 func (c *customersHandler) RegisterCusrtomers(e echo.Context) error {
 

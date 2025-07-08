@@ -21,9 +21,6 @@ const docTemplate = `{
                 "consumes": [
                     "application/json"
                 ],
-                "produces": [
-                    "application/json"
-                ],
                 "tags": [
                     "Customers"
                 ],
@@ -42,6 +39,18 @@ const docTemplate = `{
                 "responses": {
                     "201": {
                         "description": "customer successfully registered",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Se retorna cuando hay un campo que no cumple con los requisitos o directamente el body se envía vacío.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Se retorna cuando ocurre un error inexperado en el servidor.",
                         "schema": {
                             "type": "string"
                         }
