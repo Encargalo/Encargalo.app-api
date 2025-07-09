@@ -4,11 +4,10 @@ import (
 	dto "CaliYa/core/domain/dto/customers"
 	models "CaliYa/core/domain/models/customers"
 	"CaliYa/core/domain/ports"
-	"CaliYa/core/errors"
+	calierrors "CaliYa/core/errors"
 	"CaliYa/core/utils"
 	"context"
-
-	"fmt"
+	"errors"
 )
 
 type customersApp struct {
@@ -27,13 +26,13 @@ func (c *customersApp) RegisterCustomer(ctx context.Context, customer dto.Regist
 
 	custo, err := c.SearchCustomerBy(ctx, dto.SearchCustomerBy{Phone: customer.Phone})
 	if err != nil {
-		if err == errors.ErrUnexpected {
+		if err == calierrors.ErrUnexpected {
 			return err
 		}
 	}
 
 	if custo != nil {
-		return fmt.Errorf("phone al ready exist")
+		return errors.New("phone al ready exist")
 	}
 
 	c.pass.HashPassword(&customer.Password)
