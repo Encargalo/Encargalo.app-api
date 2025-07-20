@@ -2,6 +2,7 @@ package providers
 
 import (
 	"CaliYa/cmd/api/handler"
+	middleware "CaliYa/cmd/api/middleware/requets"
 	"CaliYa/cmd/api/router"
 	"CaliYa/cmd/api/router/groups"
 	"CaliYa/config"
@@ -41,6 +42,8 @@ func BuildContainer() *dig.Container {
 	_ = Container.Provide(groups.NewPromotionsGroup)
 	_ = Container.Provide(groups.NewShopsGroup)
 	_ = Container.Provide(groups.NewCustomersGroup)
+
+	_ = Container.Provide(middleware.NewRequestMiddleware)
 
 	_ = Container.Provide(handler.NewProducts)
 	_ = Container.Provide(handler.NewOrdersHandler)

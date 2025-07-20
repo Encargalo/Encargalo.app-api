@@ -9,7 +9,7 @@ import (
 )
 
 type CustomersHandler interface {
-	RegisterCusrtomers(e echo.Context) error
+	RegisterCustomers(e echo.Context) error
 }
 
 type customersHandler struct {
@@ -30,7 +30,7 @@ func NewCustomersHandler(customerApp ports.CustomersApp) CustomersHandler {
 // @Failure      400 {string} string "Se retorna cuando hay un campo que no cumple con los requisitos o directamente el body se envía vacío."
 // @Failure      500 {string} string "Se retorna cuando ocurre un error inexperado en el servidor."
 // @Router       /customers [post]
-func (c *customersHandler) RegisterCusrtomers(e echo.Context) error {
+func (c *customersHandler) RegisterCustomers(e echo.Context) error {
 
 	ctx := e.Request().Context()
 

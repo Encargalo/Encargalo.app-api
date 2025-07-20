@@ -40,7 +40,7 @@ func (c *customersApp) RegisterCustomer(ctx context.Context, customer dto.Regist
 	customerModel := models.Accounts{}
 	customerModel.BuildCustomerRegisterModel(customer)
 
-	_, err = c.repo.RegisterCustomer(ctx, &customerModel)
+	custo, err = c.repo.RegisterCustomer(ctx, &customerModel)
 	if err != nil {
 		return err
 	}

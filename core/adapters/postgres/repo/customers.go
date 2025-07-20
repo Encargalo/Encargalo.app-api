@@ -21,7 +21,7 @@ func NewCustomersRepo(db *bun.DB) ports.CustomersRepo {
 	return &customersRepo{db}
 }
 
-func (c *customersRepo) RegisterCustomer(ctx context.Context, customer *models.Accounts) (*models.ActivateAccount, error) {
+func (c *customersRepo) RegisterCustomer(ctx context.Context, customer *models.Accounts) (*models.Accounts, error) {
 
 	tx, err := c.db.BeginTx(ctx, nil)
 	if err != nil {
@@ -29,7 +29,7 @@ func (c *customersRepo) RegisterCustomer(ctx context.Context, customer *models.A
 		return nil, errors.ErrUnexpected
 	}
 
-	if _, err := tx.NewInsert().Model(customer).Returning("id").Exec(ctx); err != nil {
+	if _, err := tx.NewInsert().Model(customer).Returning("*").Exec(ctx); err != nil {
 		_ = tx.Rollback()
 		fmt.Println("error al insertar el customer")
 		return nil, errors.ErrUnexpected
@@ -49,7 +49,7 @@ func (c *customersRepo) RegisterCustomer(ctx context.Context, customer *models.A
 		return nil, errors.ErrUnexpected
 	}
 
-	return activationAccount, nil
+	return customer, nil
 }
 
 func (c *customersRepo) SearchCustomerBy(ctx context.Context, criteria dto.SearchCustomerBy) (*models.Accounts, error) {
