@@ -9,6 +9,7 @@ import (
 	"CaliYa/core/adapters/mongo"
 	"CaliYa/core/adapters/postgres"
 	"CaliYa/core/adapters/postgres/repo"
+	"CaliYa/core/adapters/postgres/repo/sessions"
 	adapters "CaliYa/core/adapters/twilio"
 	"CaliYa/core/app"
 	"CaliYa/core/utils"
@@ -51,12 +52,14 @@ func BuildContainer() *dig.Container {
 	_ = Container.Provide(handler.NewShopsHandler)
 	_ = Container.Provide(handler.NewCustomersHandler)
 
+	_ = Container.Provide(app.NewSessionsApp)
 	_ = Container.Provide(app.NewProductsApp)
 	_ = Container.Provide(app.NewOrdersApp)
 	_ = Container.Provide(app.NewPromotionsApp)
 	_ = Container.Provide(app.NewShopsApp)
 	_ = Container.Provide(app.NewCustomerApp)
 
+	_ = Container.Provide(sessions.NewSessionsRepo)
 	_ = Container.Provide(repo.NewProductsRepo)
 	_ = Container.Provide(repo.NewOrdersRepo)
 	_ = Container.Provide(repo.NewPromotionsRepository)
@@ -64,6 +67,7 @@ func BuildContainer() *dig.Container {
 	_ = Container.Provide(repo.NewCustomersRepo)
 
 	_ = Container.Provide(utils.NewHashPassword)
+	_ = Container.Provide(utils.NewSessionUtils)
 
 	return Container
 }

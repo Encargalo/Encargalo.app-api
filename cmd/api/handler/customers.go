@@ -3,7 +3,10 @@ package handler
 import (
 	dto "CaliYa/core/domain/dto/customers"
 	"CaliYa/core/domain/ports"
+	"CaliYa/core/utils"
+	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/labstack/echo/v4"
 )
@@ -14,10 +17,11 @@ type CustomersHandler interface {
 
 type customersHandler struct {
 	customerApp ports.CustomersApp
+	utils       utils.Sessions
 }
 
-func NewCustomersHandler(customerApp ports.CustomersApp) CustomersHandler {
-	return &customersHandler{customerApp}
+func NewCustomersHandler(customerApp ports.CustomersApp, utils utils.Sessions) CustomersHandler {
+	return &customersHandler{customerApp, utils}
 }
 
 // RegisterCustomers godoc
@@ -44,7 +48,7 @@ func (c *customersHandler) RegisterCustomers(e echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
-	err := c.customerApp.RegisterCustomer(ctx, customer)
+	sessionID, err := c.customerApp.RegisterCustomer(ctx, customer)
 	if err != nil {
 		switch err.Error() {
 		case "phone al ready exist":
@@ -53,6 +57,23 @@ func (c *customersHandler) RegisterCustomers(e echo.Context) error {
 			return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 		}
 	}
+
+	sessionJWT, err := c.utils.CreateSession(sessionID)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	cookie := &http.Cookie{
+		Name:     "Sessions",
+		Value:    sessionJWT,
+		Secure:   true,
+		SameSite: http.SameSiteNoneMode,
+		HttpOnly: true,
+		Path:     "/",
+		Expires:  time.Now().Add(30 * 24 * time.Hour), // Expira en 30 días
+	}
+
+	e.SetCookie(cookie)
 
 	return e.JSON(http.StatusCreated, "customer successfully registered")
 }

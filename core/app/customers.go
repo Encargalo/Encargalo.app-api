@@ -8,31 +8,35 @@ import (
 	"CaliYa/core/utils"
 	"context"
 	"errors"
+
+	"github.com/google/uuid"
 )
 
 type customersApp struct {
-	repo ports.CustomersRepo
-	pass utils.Password
+	repo        ports.CustomersRepo
+	pass        utils.Password
+	sessionsSvc ports.SessionsApp
 }
 
-func NewCustomerApp(repo ports.CustomersRepo, pass utils.Password) ports.CustomersApp {
+func NewCustomerApp(repo ports.CustomersRepo, pass utils.Password, sessionsSvc ports.SessionsApp) ports.CustomersApp {
 	return &customersApp{
 		repo,
 		pass,
+		sessionsSvc,
 	}
 }
 
-func (c *customersApp) RegisterCustomer(ctx context.Context, customer dto.RegisterCustomer) error {
+func (c *customersApp) RegisterCustomer(ctx context.Context, customer dto.RegisterCustomer) (uuid.UUID, error) {
 
 	custo, err := c.SearchCustomerBy(ctx, dto.SearchCustomerBy{Phone: customer.Phone})
 	if err != nil {
 		if err == calierrors.ErrUnexpected {
-			return err
+			return uuid.Nil, err
 		}
 	}
 
 	if custo != nil {
-		return errors.New("phone al ready exist")
+		return uuid.Nil, errors.New("phone al ready exist")
 	}
 
 	c.pass.HashPassword(&customer.Password)
@@ -42,10 +46,15 @@ func (c *customersApp) RegisterCustomer(ctx context.Context, customer dto.Regist
 
 	custo, err = c.repo.RegisterCustomer(ctx, &customerModel)
 	if err != nil {
-		return err
+		return uuid.Nil, err
 	}
 
-	return nil
+	sessionID, err := c.sessionsSvc.RegisterSessions(ctx, custo.ID, "Client")
+	if err != nil {
+		return uuid.Nil, err
+	}
+
+	return sessionID, nil
 }
 
 func (c *customersApp) SearchCustomerBy(ctx context.Context, criteria dto.SearchCustomerBy) (*models.Accounts, error) {
