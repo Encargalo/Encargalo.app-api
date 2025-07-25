@@ -2,13 +2,17 @@ package providers
 
 import (
 	"CaliYa/cmd/api/handler"
+	middleware "CaliYa/cmd/api/middleware/requets"
 	"CaliYa/cmd/api/router"
 	"CaliYa/cmd/api/router/groups"
 	"CaliYa/config"
 	"CaliYa/core/adapters/mongo"
 	"CaliYa/core/adapters/postgres"
 	"CaliYa/core/adapters/postgres/repo"
+	"CaliYa/core/adapters/postgres/repo/sessions"
+	adapters "CaliYa/core/adapters/twilio"
 	"CaliYa/core/app"
+	"CaliYa/core/utils"
 
 	"github.com/labstack/echo/v4"
 	"go.uber.org/dig"
@@ -30,6 +34,7 @@ func BuildContainer() *dig.Container {
 
 	_ = Container.Provide(postgres.NewPostgresConnection)
 	_ = Container.Provide(mongo.NewMongoConnection)
+	_ = Container.Provide(adapters.NewTwilioClient)
 
 	_ = Container.Provide(router.New)
 
@@ -37,21 +42,32 @@ func BuildContainer() *dig.Container {
 	_ = Container.Provide(groups.NewOrdersGroup)
 	_ = Container.Provide(groups.NewPromotionsGroup)
 	_ = Container.Provide(groups.NewShopsGroup)
+	_ = Container.Provide(groups.NewCustomersGroup)
+
+	_ = Container.Provide(middleware.NewRequestMiddleware)
 
 	_ = Container.Provide(handler.NewProducts)
 	_ = Container.Provide(handler.NewOrdersHandler)
 	_ = Container.Provide(handler.NewPromos)
 	_ = Container.Provide(handler.NewShopsHandler)
+	_ = Container.Provide(handler.NewCustomersHandler)
 
+	_ = Container.Provide(app.NewSessionsApp)
 	_ = Container.Provide(app.NewProductsApp)
 	_ = Container.Provide(app.NewOrdersApp)
 	_ = Container.Provide(app.NewPromotionsApp)
 	_ = Container.Provide(app.NewShopsApp)
+	_ = Container.Provide(app.NewCustomerApp)
 
+	_ = Container.Provide(sessions.NewSessionsRepo)
 	_ = Container.Provide(repo.NewProductsRepo)
 	_ = Container.Provide(repo.NewOrdersRepo)
 	_ = Container.Provide(repo.NewPromotionsRepository)
 	_ = Container.Provide(repo.NewShopsRepository)
+	_ = Container.Provide(repo.NewCustomersRepo)
+
+	_ = Container.Provide(utils.NewHashPassword)
+	_ = Container.Provide(utils.NewSessionUtils)
 
 	return Container
 }
