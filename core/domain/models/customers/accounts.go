@@ -16,7 +16,7 @@ type Accounts struct {
 	SurName          string     `bun:"sur_name,notnull"`
 	Phone            string     `bun:"phone,notnull"`
 	Email            *string    `bun:"email"`
-	Password         []byte     `bun:"password,notnull"`
+	Password         string     `bun:"password,notnull"`
 	BirthdayDate     string     `bun:"birthday_date"`
 	ActivationStatus string     `bun:"activation_status,default:'in progress'"`
 	CreatedAt        time.Time  `bun:"created_at,default:now()"`
@@ -32,5 +32,5 @@ func (c *Accounts) BuildCustomerRegisterModel(customer dto.RegisterCustomer) {
 	c.Phone = customer.Phone
 	c.Email = &customer.Email
 	c.BirthdayDate = customer.BirthdayDate
-	c.Password = []byte(customer.Password)
+	c.Password = customer.Password
 }

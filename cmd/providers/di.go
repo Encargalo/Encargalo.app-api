@@ -2,6 +2,7 @@ package providers
 
 import (
 	"CaliYa/cmd/api/handler"
+	"CaliYa/cmd/api/handler/customers"
 	middleware "CaliYa/cmd/api/middleware/requets"
 	"CaliYa/cmd/api/router"
 	"CaliYa/cmd/api/router/groups"
@@ -13,6 +14,9 @@ import (
 	adapters "CaliYa/core/adapters/twilio"
 	"CaliYa/core/app"
 	"CaliYa/core/utils"
+
+	customersApp "CaliYa/core/app/customers"
+	sessionsApp "CaliYa/core/app/sessions"
 
 	"github.com/labstack/echo/v4"
 	"go.uber.org/dig"
@@ -50,14 +54,16 @@ func BuildContainer() *dig.Container {
 	_ = Container.Provide(handler.NewOrdersHandler)
 	_ = Container.Provide(handler.NewPromos)
 	_ = Container.Provide(handler.NewShopsHandler)
-	_ = Container.Provide(handler.NewCustomersHandler)
+	_ = Container.Provide(customers.NewCustomersHandler)
+	_ = Container.Provide(customers.NewSignInCustomers)
 
-	_ = Container.Provide(app.NewSessionsApp)
+	_ = Container.Provide(sessionsApp.NewSessionsApp)
 	_ = Container.Provide(app.NewProductsApp)
 	_ = Container.Provide(app.NewOrdersApp)
 	_ = Container.Provide(app.NewPromotionsApp)
 	_ = Container.Provide(app.NewShopsApp)
-	_ = Container.Provide(app.NewCustomerApp)
+	_ = Container.Provide(customersApp.NewCustomerApp)
+	_ = Container.Provide(customersApp.NewCustomersSessionsApp)
 
 	_ = Container.Provide(sessions.NewSessionsRepo)
 	_ = Container.Provide(repo.NewProductsRepo)

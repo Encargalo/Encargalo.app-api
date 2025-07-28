@@ -1,8 +1,8 @@
-package handler
+package customers
 
 import (
 	dto "CaliYa/core/domain/dto/customers"
-	"CaliYa/core/domain/ports"
+	ports "CaliYa/core/domain/ports/customers"
 	"CaliYa/core/utils"
 	"fmt"
 	"net/http"
