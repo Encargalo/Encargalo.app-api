@@ -3,7 +3,7 @@ package repo
 import (
 	dto "CaliYa/core/domain/dto/customers"
 	models "CaliYa/core/domain/models/customers"
-	"CaliYa/core/domain/ports"
+	ports "CaliYa/core/domain/ports/customers"
 	"CaliYa/core/errors"
 	"context"
 	"database/sql"

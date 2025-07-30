@@ -1,8 +1,8 @@
-package app
+package sessions
 
 import (
 	sessionModel "CaliYa/core/domain/models/sessions"
-	"CaliYa/core/domain/ports"
+	ports "CaliYa/core/domain/ports/sessions"
 	"context"
 	"fmt"
 

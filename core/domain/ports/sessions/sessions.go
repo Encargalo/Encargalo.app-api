@@ -1,4 +1,4 @@
-package ports
+package sessions
 
 import (
 	"CaliYa/core/domain/models/sessions"

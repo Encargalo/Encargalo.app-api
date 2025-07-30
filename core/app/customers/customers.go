@@ -1,9 +1,10 @@
-package app
+package customers
 
 import (
 	dto "CaliYa/core/domain/dto/customers"
 	models "CaliYa/core/domain/models/customers"
-	"CaliYa/core/domain/ports"
+	ports "CaliYa/core/domain/ports/customers"
+	sessions "CaliYa/core/domain/ports/sessions"
 	calierrors "CaliYa/core/errors"
 	"CaliYa/core/utils"
 	"context"
@@ -15,10 +16,10 @@ import (
 type customersApp struct {
 	repo        ports.CustomersRepo
 	pass        utils.Password
-	sessionsSvc ports.SessionsApp
+	sessionsSvc sessions.SessionsApp
 }
 
-func NewCustomerApp(repo ports.CustomersRepo, pass utils.Password, sessionsSvc ports.SessionsApp) ports.CustomersApp {
+func NewCustomerApp(repo ports.CustomersRepo, pass utils.Password, sessionsSvc sessions.SessionsApp) ports.CustomersApp {
 	return &customersApp{
 		repo,
 		pass,

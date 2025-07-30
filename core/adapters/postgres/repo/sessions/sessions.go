@@ -1,7 +1,7 @@
 package sessions
 
 import (
-	"CaliYa/core/domain/ports"
+	sessionsPorts "CaliYa/core/domain/ports/sessions"
 	"context"
 
 	sessionsModel "CaliYa/core/domain/models/sessions"
@@ -14,7 +14,7 @@ type sessions struct {
 	db *bun.DB
 }
 
-func NewSessionsRepo(db *bun.DB) ports.SessionsRepo {
+func NewSessionsRepo(db *bun.DB) sessionsPorts.SessionsRepo {
 	return &sessions{db}
 }
 
