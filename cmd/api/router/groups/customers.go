@@ -35,7 +35,8 @@ func NewCustomersGroup(
 
 func (o *customersGroup) Resource(g *echo.Group) {
 	g.POST("/customers/sign_in", o.handlersignIn.CreateSession, o.middle.GetRequestInfo)
-	g.POST("/customers", o.handlerCustomers.RegisterCustomers, o.middle.GetRequestInfo)
+	g.POST("/customers", o.handlerCustomers.RegisterCustomer, o.middle.GetRequestInfo)
+	g.GET("/customers", o.handlerCustomers.SearchCustomer, o.middle.GetRequestInfo, o.middleAuth.Auth)
 	g.POST("/customers/address", o.handlerAddress.RegisterAddress, o.middle.GetRequestInfo, o.middleAuth.Auth)
 	g.GET("/customers/address", o.handlerAddress.SearchAllAdrress, o.middle.GetRequestInfo, o.middleAuth.Auth)
 }

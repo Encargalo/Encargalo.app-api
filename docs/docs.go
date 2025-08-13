@@ -16,6 +16,36 @@ const docTemplate = `{
     "basePath": "{{.BasePath}}",
     "paths": {
         "/customers": {
+            "get": {
+                "description": "Retorna los datos del cliente identificado por el customer_id contenido en el token",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Customers"
+                ],
+                "summary": "Obtiene la información del cliente autenticado",
+                "responses": {
+                    "200": {
+                        "description": "Datos del cliente",
+                        "schema": {
+                            "$ref": "#/definitions/customers.CustomerResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "not found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "unexpected error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
             "post": {
                 "description": "Registrar un nuevo cliente en el sistema con los datos proporcionados. Valida campos obligatorios como nombre, teléfono y contraseña.",
                 "consumes": [
@@ -311,7 +341,7 @@ const docTemplate = `{
             "required": [
                 "address",
                 "alias",
-                "cords",
+                "coords",
                 "reference"
             ],
             "properties": {
@@ -323,7 +353,7 @@ const docTemplate = `{
                     "type": "string",
                     "example": "Casa principal"
                 },
-                "cords": {
+                "coords": {
                     "$ref": "#/definitions/customers.Cords"
                 },
                 "id": {
@@ -349,6 +379,39 @@ const docTemplate = `{
                 "long": {
                     "type": "number",
                     "example": -74.08175
+                }
+            }
+        },
+        "customers.CustomerResponse": {
+            "type": "object",
+            "required": [
+                "birthday_date",
+                "name",
+                "phone",
+                "sur_name"
+            ],
+            "properties": {
+                "birthday_date": {
+                    "type": "string",
+                    "example": "1990-05-20"
+                },
+                "email": {
+                    "type": "string",
+                    "example": "carlos.ramirez@example.com"
+                },
+                "name": {
+                    "type": "string",
+                    "minLength": 3,
+                    "example": "Carlos"
+                },
+                "phone": {
+                    "type": "string",
+                    "example": "+573001112233"
+                },
+                "sur_name": {
+                    "type": "string",
+                    "minLength": 3,
+                    "example": "Ramírez"
                 }
             }
         },

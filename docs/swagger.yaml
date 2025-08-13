@@ -8,7 +8,7 @@ definitions:
       alias:
         example: Casa principal
         type: string
-      cords:
+      coords:
         $ref: '#/definitions/customers.Cords'
       id:
         type: string
@@ -18,7 +18,7 @@ definitions:
     required:
     - address
     - alias
-    - cords
+    - coords
     - reference
     type: object
   customers.Cords:
@@ -32,6 +32,31 @@ definitions:
     required:
     - lat
     - long
+    type: object
+  customers.CustomerResponse:
+    properties:
+      birthday_date:
+        example: "1990-05-20"
+        type: string
+      email:
+        example: carlos.ramirez@example.com
+        type: string
+      name:
+        example: Carlos
+        minLength: 3
+        type: string
+      phone:
+        example: "+573001112233"
+        type: string
+      sur_name:
+        example: Ramírez
+        minLength: 3
+        type: string
+    required:
+    - birthday_date
+    - name
+    - phone
+    - sur_name
     type: object
   customers.RegisterCustomer:
     properties:
@@ -143,6 +168,27 @@ info:
   version: 1.0.1
 paths:
   /customers:
+    get:
+      description: Retorna los datos del cliente identificado por el customer_id contenido
+        en el token
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Datos del cliente
+          schema:
+            $ref: '#/definitions/customers.CustomerResponse'
+        "404":
+          description: not found
+          schema:
+            type: string
+        "500":
+          description: unexpected error
+          schema:
+            type: string
+      summary: Obtiene la información del cliente autenticado
+      tags:
+      - Customers
     post:
       consumes:
       - application/json

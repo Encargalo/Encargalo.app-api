@@ -22,8 +22,6 @@ type Accounts struct {
 	CreatedAt        time.Time  `bun:"created_at,default:now()"`
 	UpdatedAt        time.Time  `bun:"updated_at,default:now()"`
 	DeletedAt        *time.Time `bun:"deleted_at,nullzero"`
-
-	Addresses []*Address `bun:"rel:has-many,join:id=customer_id"`
 }
 
 func (c *Accounts) BuildCustomerRegisterModel(customer dto.RegisterCustomer) {
@@ -33,4 +31,14 @@ func (c *Accounts) BuildCustomerRegisterModel(customer dto.RegisterCustomer) {
 	c.Email = &customer.Email
 	c.BirthdayDate = customer.BirthdayDate
 	c.Password = customer.Password
+}
+
+func (c *Accounts) ToDomainDTO() dto.CustomerResponse {
+	return dto.CustomerResponse{
+		Name:         c.Name,
+		SurName:      c.SurName,
+		Phone:        c.Phone,
+		Email:        *c.Email,
+		BirthdayDate: c.BirthdayDate,
+	}
 }

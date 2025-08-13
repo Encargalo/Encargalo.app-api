@@ -68,7 +68,6 @@ func (c *customersRepo) SearchCustomerBy(ctx context.Context, criteria dto.Searc
 			return sq
 		}).
 		Where("deleted_at IS NULL").
-		Relation("Addresses").
 		Scan(ctx)
 
 	if err != nil {

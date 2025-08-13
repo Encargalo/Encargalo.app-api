@@ -44,3 +44,11 @@ func (c *RegisterCustomer) Validate() error {
 
 	return err
 }
+
+type CustomerResponse struct {
+	Name         string `json:"name" validate:"required,min=3" example:"Carlos"`
+	SurName      string `json:"sur_name" validate:"required,min=3" example:"Ramírez"`
+	Phone        string `json:"phone" validate:"required,e164" example:"+573001112233"`
+	Email        string `json:"email" example:"carlos.ramirez@example.com"`
+	BirthdayDate string `json:"birthday_date" validate:"required,datetime=2006-01-02" example:"1990-05-20"`
+}

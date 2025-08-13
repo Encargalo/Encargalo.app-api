@@ -1,18 +1,22 @@
 package customers
 
 import (
+	"CaliYa/core/domain/dto/customers"
 	dto "CaliYa/core/domain/dto/customers"
 	ports "CaliYa/core/domain/ports/customers"
 	"CaliYa/core/utils"
 	"fmt"
 	"net/http"
+	"strings"
 	"time"
 
+	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
 )
 
 type CustomersHandler interface {
-	RegisterCustomers(e echo.Context) error
+	RegisterCustomer(e echo.Context) error
+	SearchCustomer(e echo.Context) error
 }
 
 type customersHandler struct {
@@ -24,7 +28,7 @@ func NewCustomersHandler(customerApp ports.CustomersApp, utils utils.Sessions) C
 	return &customersHandler{customerApp, utils}
 }
 
-// RegisterCustomers godoc
+// RegisterCustomer godoc
 // @Summary      Registrar un nuevo cliente
 // @Description  Registrar un nuevo cliente en el sistema con los datos proporcionados. Valida campos obligatorios como nombre, teléfono y contraseña.
 // @Tags         Customers
@@ -34,7 +38,7 @@ func NewCustomersHandler(customerApp ports.CustomersApp, utils utils.Sessions) C
 // @Failure      400 {string} string "Se retorna cuando hay un campo que no cumple con los requisitos o directamente el body se envía vacío."
 // @Failure      500 {string} string "Se retorna cuando ocurre un error inexperado en el servidor."
 // @Router       /customers [post]
-func (c *customersHandler) RegisterCustomers(e echo.Context) error {
+func (c *customersHandler) RegisterCustomer(e echo.Context) error {
 
 	ctx := e.Request().Context()
 
@@ -76,4 +80,40 @@ func (c *customersHandler) RegisterCustomers(e echo.Context) error {
 	e.SetCookie(cookie)
 
 	return e.JSON(http.StatusCreated, "customer successfully registered")
+}
+
+// SearchCustomer godoc
+// @Summary Obtiene la información del cliente autenticado
+// @Description Retorna los datos del cliente identificado por el customer_id contenido en el token
+// @Tags Customers
+// @Produce json
+// @Success 200 {object} customers.CustomerResponse "Datos del cliente"
+// @Failure 404 {string} string "not found"
+// @Failure 500 {string} string "unexpected error"
+// @Router /customers [get]
+func (c *customersHandler) SearchCustomer(e echo.Context) error {
+
+	ctx := e.Request().Context()
+
+	customer_id, err := uuid.Parse(strings.TrimSpace(fmt.Sprintln(ctx.Value("customer_id"))))
+	if err != nil {
+		fmt.Println("Error al obtener el customer_id")
+		return echo.NewHTTPError(http.StatusInternalServerError, "unexpected error")
+	}
+
+	customerID := customers.SearchCustomerBy{
+		ID: customer_id,
+	}
+
+	custo, err := c.customerApp.SearchCustomerBy(ctx, customerID)
+	if err != nil {
+		switch err.Error() {
+		case "not found":
+			return echo.NewHTTPError(http.StatusNotFound, "not found")
+		default:
+			return echo.NewHTTPError(http.StatusInternalServerError, "unexpected error")
+		}
+	}
+
+	return e.JSON(http.StatusOK, custo.ToDomainDTO())
 }
