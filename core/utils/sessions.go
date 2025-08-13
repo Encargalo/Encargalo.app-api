@@ -2,6 +2,7 @@ package utils
 
 import (
 	"CaliYa/config"
+	"fmt"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -15,6 +16,7 @@ type Claim struct {
 
 type Sessions interface {
 	CreateSession(sessionID uuid.UUID) (string, error)
+	ValidateToken(value string) (jwt.MapClaims, error)
 }
 
 type sessions struct {
@@ -38,4 +40,23 @@ func (s *sessions) CreateSession(sessionID uuid.UUID) (string, error) {
 
 	return jwt.NewWithClaims(jwt.SigningMethodHS256, claims).SignedString([]byte(configJWT.Secret))
 
+}
+
+func (s *sessions) ValidateToken(value string) (jwt.MapClaims, error) {
+
+	token, err := jwt.Parse(value, func(t *jwt.Token) (interface{}, error) {
+		if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("unexpected signing method: %v", t.Header["alg"])
+		}
+		return []byte(s.config.JWT.Secret), nil
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
+		return claims, nil
+	}
+
+	return nil, fmt.Errorf("invalid token")
 }

@@ -58,7 +58,7 @@ type Twilio struct {
 }
 
 type JWT struct {
-	Secret string `env:"sectet"`
+	Secret string `env:"secret"`
 }
 
 func Environments() {

@@ -15,6 +15,7 @@ import (
 	"CaliYa/core/app"
 	"CaliYa/core/utils"
 
+	customersRepo "CaliYa/core/adapters/postgres/repo/customers"
 	customersApp "CaliYa/core/app/customers"
 	sessionsApp "CaliYa/core/app/sessions"
 
@@ -49,6 +50,7 @@ func BuildContainer() *dig.Container {
 	_ = Container.Provide(groups.NewCustomersGroup)
 
 	_ = Container.Provide(middleware.NewRequestMiddleware)
+	_ = Container.Provide(middleware.NewAuthMidlleware)
 
 	_ = Container.Provide(handler.NewProducts)
 	_ = Container.Provide(handler.NewOrdersHandler)
@@ -56,6 +58,7 @@ func BuildContainer() *dig.Container {
 	_ = Container.Provide(handler.NewShopsHandler)
 	_ = Container.Provide(customers.NewCustomersHandler)
 	_ = Container.Provide(customers.NewSignInCustomers)
+	_ = Container.Provide(customers.NewCustomersAddressHandler)
 
 	_ = Container.Provide(sessionsApp.NewSessionsApp)
 	_ = Container.Provide(app.NewProductsApp)
@@ -64,13 +67,15 @@ func BuildContainer() *dig.Container {
 	_ = Container.Provide(app.NewShopsApp)
 	_ = Container.Provide(customersApp.NewCustomerApp)
 	_ = Container.Provide(customersApp.NewCustomersSessionsApp)
+	_ = Container.Provide(customersApp.NewCustomersAddressApp)
 
 	_ = Container.Provide(sessions.NewSessionsRepo)
 	_ = Container.Provide(repo.NewProductsRepo)
 	_ = Container.Provide(repo.NewOrdersRepo)
 	_ = Container.Provide(repo.NewPromotionsRepository)
 	_ = Container.Provide(repo.NewShopsRepository)
-	_ = Container.Provide(repo.NewCustomersRepo)
+	_ = Container.Provide(customersRepo.NewCustomersRepo)
+	_ = Container.Provide(customersRepo.NewCustomersAddressRepo)
 
 	_ = Container.Provide(utils.NewHashPassword)
 	_ = Container.Provide(utils.NewSessionUtils)

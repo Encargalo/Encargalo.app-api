@@ -1,6 +1,7 @@
 package sessions
 
 import (
+	"CaliYa/core/domain/models/sessions"
 	sessionModel "CaliYa/core/domain/models/sessions"
 	ports "CaliYa/core/domain/ports/sessions"
 	"context"
@@ -23,5 +24,11 @@ func (s *sessionApp) RegisterSessions(ctx context.Context, userID uuid.UUID, use
 	session.BuildActiveSessionModel(userID, userType, fmt.Sprint("", ctx.Value("ip")), fmt.Sprint("", ctx.Value("user-agent")))
 
 	return s.repo.RegisterSessions(ctx, &session)
+
+}
+
+func (s *sessionApp) SearchSessions(ctx context.Context, id uuid.UUID) (sessions.ActiveSession, error) {
+
+	return s.repo.SearchSessions(ctx, id)
 
 }

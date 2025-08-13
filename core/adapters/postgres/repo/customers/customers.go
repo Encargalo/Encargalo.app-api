@@ -1,4 +1,4 @@
-package repo
+package customers
 
 import (
 	dto "CaliYa/core/domain/dto/customers"

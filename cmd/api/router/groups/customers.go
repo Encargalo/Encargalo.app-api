@@ -12,16 +12,30 @@ type CustomersGroup interface {
 }
 
 type customersGroup struct {
-	handlerCustomers customers.CustomersHandler
-	handlersignIn    customers.Sign_In
 	middle           middleware.Request
+	middleAuth       middleware.AuthMiddleware
+	handlersignIn    customers.Sign_In
+	handlerAddress   customers.CustomersAddressHandler
+	handlerCustomers customers.CustomersHandler
 }
 
-func NewCustomersGroup(handlerCustomers customers.CustomersHandler, handlersignIn customers.Sign_In, middle middleware.Request) CustomersGroup {
-	return &customersGroup{handlerCustomers, handlersignIn, middle}
+func NewCustomersGroup(
+	middle middleware.Request,
+	middleAuth middleware.AuthMiddleware,
+	handlersignIn customers.Sign_In,
+	handlerAddress customers.CustomersAddressHandler,
+	handlerCustomers customers.CustomersHandler) CustomersGroup {
+	return &customersGroup{
+		middle,
+		middleAuth,
+		handlersignIn,
+		handlerAddress,
+		handlerCustomers}
 }
 
 func (o *customersGroup) Resource(g *echo.Group) {
-	g.POST("/customers/sign_in", o.handlersignIn.CreateSession)
+	g.POST("/customers/sign_in", o.handlersignIn.CreateSession, o.middle.GetRequestInfo)
 	g.POST("/customers", o.handlerCustomers.RegisterCustomers, o.middle.GetRequestInfo)
+	g.POST("/customers/address", o.handlerAddress.RegisterAddress, o.middle.GetRequestInfo, o.middleAuth.Auth)
+	g.GET("/customers/address", o.handlerAddress.SearchAllAdrress, o.middle.GetRequestInfo, o.middleAuth.Auth)
 }

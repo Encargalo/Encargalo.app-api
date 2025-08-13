@@ -32,7 +32,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/dto.RegisterCustomer"
+                            "$ref": "#/definitions/customers.RegisterCustomer"
                         }
                     }
                 ],
@@ -51,6 +51,85 @@ const docTemplate = `{
                     },
                     "500": {
                         "description": "Se retorna cuando ocurre un error inexperado en el servidor.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/customers/address": {
+            "get": {
+                "description": "Retorna un arreglo con todas las direcciones asociadas al cliente identificado en el token",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Customers Address"
+                ],
+                "summary": "Obtiene todas las direcciones del cliente autenticado",
+                "responses": {
+                    "200": {
+                        "description": "Lista de direcciones",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/customers.Address"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "not found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "unexpected error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Registra una dirección asociada al customer_id obtenido del contexto",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Customers Address"
+                ],
+                "summary": "Registra una nueva dirección para el cliente autenticado",
+                "parameters": [
+                    {
+                        "description": "Datos de la dirección",
+                        "name": "address",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/customers.Address"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "address registred",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "error de validación o parseo",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "unexpected error",
                         "schema": {
                             "type": "string"
                         }
@@ -227,7 +306,53 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "dto.RegisterCustomer": {
+        "customers.Address": {
+            "type": "object",
+            "required": [
+                "address",
+                "alias",
+                "cords",
+                "reference"
+            ],
+            "properties": {
+                "address": {
+                    "type": "string",
+                    "example": "Calle 123 # 45-67"
+                },
+                "alias": {
+                    "type": "string",
+                    "example": "Casa principal"
+                },
+                "cords": {
+                    "$ref": "#/definitions/customers.Cords"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "reference": {
+                    "type": "string",
+                    "example": "Frente al parque de los niños"
+                }
+            }
+        },
+        "customers.Cords": {
+            "type": "object",
+            "required": [
+                "lat",
+                "long"
+            ],
+            "properties": {
+                "lat": {
+                    "type": "number",
+                    "example": 4.60971
+                },
+                "long": {
+                    "type": "number",
+                    "example": -74.08175
+                }
+            }
+        },
+        "customers.RegisterCustomer": {
             "type": "object",
             "required": [
                 "birthday_date",

@@ -1,6 +1,39 @@
 basePath: /api
 definitions:
-  dto.RegisterCustomer:
+  customers.Address:
+    properties:
+      address:
+        example: 'Calle 123 # 45-67'
+        type: string
+      alias:
+        example: Casa principal
+        type: string
+      cords:
+        $ref: '#/definitions/customers.Cords'
+      id:
+        type: string
+      reference:
+        example: Frente al parque de los niños
+        type: string
+    required:
+    - address
+    - alias
+    - cords
+    - reference
+    type: object
+  customers.Cords:
+    properties:
+      lat:
+        example: 4.60971
+        type: number
+      long:
+        example: -74.08175
+        type: number
+    required:
+    - lat
+    - long
+    type: object
+  customers.RegisterCustomer:
     properties:
       birthday_date:
         example: "1990-05-20"
@@ -121,7 +154,7 @@ paths:
         name: customer
         required: true
         schema:
-          $ref: '#/definitions/dto.RegisterCustomer'
+          $ref: '#/definitions/customers.RegisterCustomer'
       responses:
         "201":
           description: customer successfully registered
@@ -139,6 +172,59 @@ paths:
       summary: Registrar un nuevo cliente
       tags:
       - Customers
+  /customers/address:
+    get:
+      description: Retorna un arreglo con todas las direcciones asociadas al cliente
+        identificado en el token
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Lista de direcciones
+          schema:
+            items:
+              $ref: '#/definitions/customers.Address'
+            type: array
+        "404":
+          description: not found
+          schema:
+            type: string
+        "500":
+          description: unexpected error
+          schema:
+            type: string
+      summary: Obtiene todas las direcciones del cliente autenticado
+      tags:
+      - Customers Address
+    post:
+      consumes:
+      - application/json
+      description: Registra una dirección asociada al customer_id obtenido del contexto
+      parameters:
+      - description: Datos de la dirección
+        in: body
+        name: address
+        required: true
+        schema:
+          $ref: '#/definitions/customers.Address'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: address registred
+          schema:
+            type: string
+        "400":
+          description: error de validación o parseo
+          schema:
+            type: string
+        "500":
+          description: unexpected error
+          schema:
+            type: string
+      summary: Registra una nueva dirección para el cliente autenticado
+      tags:
+      - Customers Address
   /products/adiciones:
     get:
       description: Devuelve la lista de adiciones filtradas por el ID de la categoría

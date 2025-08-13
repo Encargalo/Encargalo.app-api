@@ -1,4 +1,4 @@
-package dto
+package customers
 
 import "github.com/google/uuid"
 
