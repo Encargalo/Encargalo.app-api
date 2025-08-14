@@ -262,7 +262,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/customers/password": {
+        "/customers/change-password": {
             "put": {
                 "security": [
                     {

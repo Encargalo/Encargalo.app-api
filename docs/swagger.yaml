@@ -363,7 +363,7 @@ paths:
       summary: Elimina una dirección del cliente autenticado
       tags:
       - Customers Address
-  /customers/password:
+  /customers/change-password:
     put:
       consumes:
       - application/json
