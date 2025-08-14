@@ -15,6 +15,7 @@ import (
 type CustomersAddressHandler interface {
 	RegisterAddress(e echo.Context) error
 	SearchAllAdrress(e echo.Context) error
+	DeleteAddress(e echo.Context) error
 }
 
 type customersAddrssHandler struct {
@@ -93,4 +94,37 @@ func (c *customersAddrssHandler) SearchAllAdrress(e echo.Context) error {
 	}
 
 	return e.JSON(http.StatusOK, addresses)
+}
+
+// DeleteAddress godoc
+// @Summary Elimina una dirección del cliente autenticado
+// @Description Elimina la dirección especificada por su ID, siempre que pertenezca al cliente autenticado
+// @Tags Customers Address
+// @Param address path string true "ID de la dirección (UUID)"
+// @Produce json
+// @Success 200 {string} string "address deleted success"
+// @Failure 500 {string} string "unexpected error"
+// @Security SessionCookie
+// @Router /customers/address/{address} [delete]
+func (c *customersAddrssHandler) DeleteAddress(e echo.Context) error {
+
+	ctx := e.Request().Context()
+
+	address_id, err := uuid.Parse(strings.TrimSpace(fmt.Sprintln(e.Param("address"))))
+	if err != nil {
+		fmt.Println("Error al obtener el address_id")
+		return echo.NewHTTPError(http.StatusInternalServerError, "unexpected error")
+	}
+
+	customer_id, err := uuid.Parse(strings.TrimSpace(fmt.Sprintln(ctx.Value("customer_id"))))
+	if err != nil {
+		fmt.Println("Error al obtener el customer_id")
+		return echo.NewHTTPError(http.StatusInternalServerError, "unexpected error")
+	}
+
+	if err := c.svc.DeleteAddress(ctx, customer_id, address_id); err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	}
+
+	return e.JSON(http.StatusOK, "address deleted success")
 }

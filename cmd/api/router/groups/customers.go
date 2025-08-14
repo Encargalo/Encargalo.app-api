@@ -39,4 +39,5 @@ func (o *customersGroup) Resource(g *echo.Group) {
 	g.GET("/customers", o.handlerCustomers.SearchCustomer, o.middle.GetRequestInfo, o.middleAuth.Auth)
 	g.POST("/customers/address", o.handlerAddress.RegisterAddress, o.middle.GetRequestInfo, o.middleAuth.Auth)
 	g.GET("/customers/address", o.handlerAddress.SearchAllAdrress, o.middle.GetRequestInfo, o.middleAuth.Auth)
+	g.DELETE("/customers/address/:address", o.handlerAddress.DeleteAddress, o.middle.GetRequestInfo, o.middleAuth.Auth)
 }

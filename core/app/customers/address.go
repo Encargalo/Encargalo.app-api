@@ -31,3 +31,7 @@ func (c *customersAddressApp) SearchAllAddress(ctx context.Context, customer_id 
 
 	return c.repo.SearchAllAddress(ctx, customer_id)
 }
+
+func (c *customersAddressApp) DeleteAddress(ctx context.Context, customer_id, address_id uuid.UUID) error {
+	return c.repo.DeleteAddress(ctx, customer_id, address_id)
+}

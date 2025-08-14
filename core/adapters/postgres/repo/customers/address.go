@@ -37,7 +37,8 @@ func (c *customersAddressRepo) SearchAllAddress(ctx context.Context, customer_id
 	var addresses customersModel.Addresses
 
 	if err := c.db.NewSelect().Model(&addresses).
-		Where("customer_id = ?", customer_id).Scan(ctx); err != nil {
+		Where("customer_id = ?", customer_id).
+		Where("deleted_at IS NULL").Scan(ctx); err != nil {
 		if err == sql.ErrNoRows {
 			return customersDTO.Addresses{}, errors.New("not found")
 		}
@@ -47,4 +48,19 @@ func (c *customersAddressRepo) SearchAllAddress(ctx context.Context, customer_id
 	}
 
 	return addresses.ToDomainDTO(), nil
+}
+
+func (c *customersAddressRepo) DeleteAddress(ctx context.Context, customer_id, address_id uuid.UUID) error {
+	_, err := c.db.NewDelete().
+		Model(&customersModel.Address{}).
+		Where("id = ?", address_id).
+		Where("customer_id = ?", customer_id).
+		Exec(ctx)
+
+	if err != nil {
+		fmt.Println(err.Error())
+		return errors.New("unexpected error")
+	}
+
+	return nil
 }

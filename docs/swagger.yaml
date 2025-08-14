@@ -271,6 +271,32 @@ paths:
       summary: Registra una nueva dirección para el cliente autenticado
       tags:
       - Customers Address
+  /customers/address/{address}:
+    delete:
+      description: Elimina la dirección especificada por su ID, siempre que pertenezca
+        al cliente autenticado
+      parameters:
+      - description: ID de la dirección (UUID)
+        in: path
+        name: address
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: address deleted success
+          schema:
+            type: string
+        "500":
+          description: unexpected error
+          schema:
+            type: string
+      security:
+      - SessionCookie: []
+      summary: Elimina una dirección del cliente autenticado
+      tags:
+      - Customers Address
   /products/adiciones:
     get:
       description: Devuelve la lista de adiciones filtradas por el ID de la categoría

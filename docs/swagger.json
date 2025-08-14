@@ -162,6 +162,46 @@
                 }
             }
         },
+        "/customers/address/{address}": {
+            "delete": {
+                "security": [
+                    {
+                        "SessionCookie": []
+                    }
+                ],
+                "description": "Elimina la dirección especificada por su ID, siempre que pertenezca al cliente autenticado",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Customers Address"
+                ],
+                "summary": "Elimina una dirección del cliente autenticado",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID de la dirección (UUID)",
+                        "name": "address",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "address deleted success",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "unexpected error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/products/adiciones": {
             "get": {
                 "description": "Devuelve la lista de adiciones filtradas por el ID de la categoría a la que pertenece un producto.",
