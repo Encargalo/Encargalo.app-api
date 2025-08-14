@@ -46,6 +46,61 @@ const docTemplate = `{
                     }
                 }
             },
+            "put": {
+                "security": [
+                    {
+                        "SessionCookie": []
+                    }
+                ],
+                "description": "Actualiza los datos del cliente usando la información enviada en el cuerpo de la solicitud",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Customers"
+                ],
+                "summary": "Actualiza la información del cliente autenticado",
+                "parameters": [
+                    {
+                        "description": "Datos del cliente a actualizar",
+                        "name": "customer",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/customers.UpdateCustomer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "customer updated success",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "error de validación o formato inválido",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "customer not found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "unexpected error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
             "post": {
                 "description": "Registrar un nuevo cliente en el sistema con los datos proporcionados. Valida campos obligatorios como nombre, teléfono y contraseña.",
                 "consumes": [
@@ -482,6 +537,39 @@ const docTemplate = `{
                     "type": "string",
                     "minLength": 8,
                     "example": "claveSegura123"
+                },
+                "phone": {
+                    "type": "string",
+                    "example": "+573001112233"
+                },
+                "sur_name": {
+                    "type": "string",
+                    "minLength": 3,
+                    "example": "Ramírez"
+                }
+            }
+        },
+        "customers.UpdateCustomer": {
+            "type": "object",
+            "required": [
+                "birthday_date",
+                "name",
+                "phone",
+                "sur_name"
+            ],
+            "properties": {
+                "birthday_date": {
+                    "type": "string",
+                    "example": "1990-05-20"
+                },
+                "email": {
+                    "type": "string",
+                    "example": "carlos.ramirez@example.com"
+                },
+                "name": {
+                    "type": "string",
+                    "minLength": 3,
+                    "example": "Carlos"
                 },
                 "phone": {
                     "type": "string",

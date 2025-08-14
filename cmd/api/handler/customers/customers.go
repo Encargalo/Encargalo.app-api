@@ -17,6 +17,7 @@ import (
 type CustomersHandler interface {
 	RegisterCustomer(e echo.Context) error
 	SearchCustomer(e echo.Context) error
+	UpdateCustomer(e echo.Context) error
 }
 
 type customersHandler struct {
@@ -116,4 +117,51 @@ func (c *customersHandler) SearchCustomer(e echo.Context) error {
 	}
 
 	return e.JSON(http.StatusOK, custo.ToDomainDTO())
+}
+
+// UpdateCustomer godoc
+// @Summary Actualiza la información del cliente autenticado
+// @Description Actualiza los datos del cliente usando la información enviada en el cuerpo de la solicitud
+// @Tags Customers
+// @Accept json
+// @Produce json
+// @Param customer body customers.UpdateCustomer true "Datos del cliente a actualizar"
+// @Success 200 {string} string "customer updated success"
+// @Failure 400 {string} string "error de validación o formato inválido"
+// @Failure 409 {string} string "customer not found"
+// @Failure 500 {string} string "unexpected error"
+// @Security SessionCookie
+// @Router /customers [put]
+func (c *customersHandler) UpdateCustomer(e echo.Context) error {
+
+	ctx := e.Request().Context()
+
+	customer := dto.UpdateCustomer{}
+
+	if err := e.Bind(&customer); err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+	}
+
+	if err := customer.Validate(); err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+	}
+
+	customer_id, err := uuid.Parse(strings.TrimSpace(fmt.Sprintln(ctx.Value("customer_id"))))
+	if err != nil {
+		fmt.Println("Error al obtener el customer_id")
+		return echo.NewHTTPError(http.StatusInternalServerError, "unexpected error")
+	}
+
+	if err := c.customerApp.UpdateCustomer(ctx, customer_id, customer); err != nil {
+		switch err.Error() {
+		case "not found.":
+			return echo.NewHTTPError(http.StatusConflict, "customer not found")
+		case "phone al ready exist":
+			return echo.NewHTTPError(http.StatusConflict, "phone al ready exist")
+		default:
+			return echo.NewHTTPError(http.StatusInternalServerError, "unexpected error")
+		}
+	}
+
+	return e.JSON(http.StatusOK, "customer updated success")
 }

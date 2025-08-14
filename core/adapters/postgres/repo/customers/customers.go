@@ -80,3 +80,33 @@ func (c *customersRepo) SearchCustomerBy(ctx context.Context, criteria dto.Searc
 	return account, nil
 
 }
+
+func (c *customersRepo) SearchCustomerByPhoneAndNotIDEquals(ctx context.Context, customer_id uuid.UUID, phone string) (*models.Accounts, error) {
+
+	account := new(models.Accounts)
+
+	err := c.db.NewSelect().
+		Model(account).
+		Where("phone = ? AND id != ?", phone, customer_id).
+		Scan(ctx)
+
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, errors.ErrNotFound
+		}
+		return nil, errors.ErrUnexpected
+	}
+
+	return account, nil
+
+}
+
+func (c *customersRepo) UpdateCustomer(ctx context.Context, customer_id uuid.UUID, customer *models.Accounts) error {
+
+	if _, err := c.db.NewUpdate().Model(customer).OmitZero().Where("id = ?", customer_id).Exec(ctx); err != nil {
+		fmt.Println(err.Error())
+		return errors.ErrUnexpected
+	}
+
+	return nil
+}

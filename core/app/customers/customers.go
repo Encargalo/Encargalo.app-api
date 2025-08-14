@@ -59,12 +59,33 @@ func (c *customersApp) RegisterCustomer(ctx context.Context, customer dto.Regist
 }
 
 func (c *customersApp) SearchCustomerBy(ctx context.Context, criteria dto.SearchCustomerBy) (*models.Accounts, error) {
+	return c.repo.SearchCustomerBy(ctx, criteria)
+}
 
-	customer, err := c.repo.SearchCustomerBy(ctx, criteria)
-	if err != nil {
-		return nil, err
+func (c *customersApp) UpdateCustomer(ctx context.Context, customer_id uuid.UUID, customer dto.UpdateCustomer) error {
+
+	criteria := dto.SearchCustomerBy{
+		ID: customer_id,
 	}
 
-	return customer, nil
+	_, err := c.SearchCustomerBy(ctx, criteria)
+	if err != nil {
+		return err
+	}
 
+	cust, err := c.repo.SearchCustomerByPhoneAndNotIDEquals(ctx, customer_id, customer.Phone)
+	if err != nil {
+		if err.Error() != "not found." {
+			return err
+		}
+	}
+
+	if cust != nil {
+		return errors.New("phone al ready exist")
+	}
+
+	customerModel := models.Accounts{}
+	customerModel.BuildCustomerUpdateModel(customer)
+
+	return c.repo.UpdateCustomer(ctx, customer_id, &customerModel)
 }

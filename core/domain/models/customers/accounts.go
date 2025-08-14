@@ -21,7 +21,7 @@ type Accounts struct {
 	ActivationStatus string     `bun:"activation_status,default:'in progress'"`
 	CreatedAt        time.Time  `bun:"created_at,default:now()"`
 	UpdatedAt        time.Time  `bun:"updated_at,default:now()"`
-	DeletedAt        *time.Time `bun:"deleted_at,nullzero"`
+	DeletedAt        *time.Time `bun:"deleted_at,soft_delete,nullzero"`
 }
 
 func (c *Accounts) BuildCustomerRegisterModel(customer dto.RegisterCustomer) {
@@ -31,6 +31,15 @@ func (c *Accounts) BuildCustomerRegisterModel(customer dto.RegisterCustomer) {
 	c.Email = &customer.Email
 	c.BirthdayDate = customer.BirthdayDate
 	c.Password = customer.Password
+}
+
+func (c *Accounts) BuildCustomerUpdateModel(customer dto.UpdateCustomer) {
+	c.Name = customer.Name
+	c.SurName = customer.SurName
+	c.Phone = customer.Phone
+	c.Email = &customer.Email
+	c.BirthdayDate = customer.BirthdayDate
+	c.UpdatedAt = time.Now()
 }
 
 func (c *Accounts) ToDomainDTO() dto.CustomerResponse {

@@ -88,6 +88,31 @@ definitions:
     - phone
     - sur_name
     type: object
+  customers.UpdateCustomer:
+    properties:
+      birthday_date:
+        example: "1990-05-20"
+        type: string
+      email:
+        example: carlos.ramirez@example.com
+        type: string
+      name:
+        example: Carlos
+        minLength: 3
+        type: string
+      phone:
+        example: "+573001112233"
+        type: string
+      sur_name:
+        example: Ramírez
+        minLength: 3
+        type: string
+    required:
+    - birthday_date
+    - name
+    - phone
+    - sur_name
+    type: object
   dto.ShopResponse:
     properties:
       address:
@@ -216,6 +241,42 @@ paths:
           schema:
             type: string
       summary: Registrar un nuevo cliente
+      tags:
+      - Customers
+    put:
+      consumes:
+      - application/json
+      description: Actualiza los datos del cliente usando la información enviada en
+        el cuerpo de la solicitud
+      parameters:
+      - description: Datos del cliente a actualizar
+        in: body
+        name: customer
+        required: true
+        schema:
+          $ref: '#/definitions/customers.UpdateCustomer'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: customer updated success
+          schema:
+            type: string
+        "400":
+          description: error de validación o formato inválido
+          schema:
+            type: string
+        "409":
+          description: customer not found
+          schema:
+            type: string
+        "500":
+          description: unexpected error
+          schema:
+            type: string
+      security:
+      - SessionCookie: []
+      summary: Actualiza la información del cliente autenticado
       tags:
       - Customers
   /customers/address:
