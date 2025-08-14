@@ -59,6 +59,17 @@ func (c *UpdateCustomer) Validate() error {
 	return validate.Struct(c)
 }
 
+type UpdatePassword struct {
+	Password string `json:"password" validate:"required,min=8" example:"claveSegura123"`
+}
+
+func (c *UpdatePassword) Validate() error {
+
+	_ = conform.Struct(context.Background(), c)
+
+	return validate.Struct(c)
+}
+
 type CustomerResponse struct {
 	Name         string `json:"name" validate:"required,min=3" example:"Carlos"`
 	SurName      string `json:"sur_name" validate:"required,min=3" example:"Ramírez"`

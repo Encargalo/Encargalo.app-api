@@ -89,3 +89,27 @@ func (c *customersApp) UpdateCustomer(ctx context.Context, customer_id uuid.UUID
 
 	return c.repo.UpdateCustomer(ctx, customer_id, &customerModel)
 }
+
+func (c *customersApp) UpdatePassword(ctx context.Context, customer_id uuid.UUID, pass dto.UpdatePassword) error {
+
+	criteria := dto.SearchCustomerBy{
+		ID: customer_id,
+	}
+
+	customer, err := c.SearchCustomerBy(ctx, criteria)
+	if err != nil {
+		return err
+	}
+
+	if customer == nil {
+		return calierrors.ErrNotFound
+	}
+
+	customerModel := models.Accounts{}
+	customerModel.BuildCustomerUpdatePasswordModel(pass)
+
+	c.pass.HashPassword(&customerModel.Password)
+
+	return c.repo.UpdatePassword(ctx, customer_id, &customerModel)
+
+}

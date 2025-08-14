@@ -110,3 +110,13 @@ func (c *customersRepo) UpdateCustomer(ctx context.Context, customer_id uuid.UUI
 
 	return nil
 }
+
+func (c *customersRepo) UpdatePassword(ctx context.Context, customer_id uuid.UUID, customer *models.Accounts) error {
+
+	if _, err := c.db.NewUpdate().Model(customer).OmitZero().Where("id = ?", customer_id).Exec(ctx); err != nil {
+		fmt.Println(err.Error())
+		return errors.ErrUnexpected
+	}
+
+	return nil
+}

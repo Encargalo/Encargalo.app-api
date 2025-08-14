@@ -41,6 +41,10 @@ func (c *Accounts) BuildCustomerUpdateModel(customer dto.UpdateCustomer) {
 	c.UpdatedAt = time.Now()
 }
 
+func (c *Accounts) BuildCustomerUpdatePasswordModel(customer dto.UpdatePassword) {
+	c.Password = customer.Password
+}
+
 func (c *Accounts) ToDomainDTO() dto.CustomerResponse {
 	return dto.CustomerResponse{
 		Name:         c.Name,

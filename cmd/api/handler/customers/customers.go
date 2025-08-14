@@ -18,7 +18,7 @@ type CustomersHandler interface {
 	RegisterCustomer(e echo.Context) error
 	SearchCustomer(e echo.Context) error
 	UpdateCustomer(e echo.Context) error
-	//UpdatePassword(e echo.Context) error
+	UpdatePassword(e echo.Context) error
 }
 
 type customersHandler struct {
@@ -165,4 +165,49 @@ func (c *customersHandler) UpdateCustomer(e echo.Context) error {
 	}
 
 	return e.JSON(http.StatusOK, "customer updated success")
+}
+
+// UpdatePassword godoc
+// @Summary Actualiza la contraseña del cliente autenticado
+// @Description Permite al cliente autenticado actualizar su contraseña, validando el formato y los requisitos establecidos
+// @Tags Customers
+// @Accept json
+// @Produce json
+// @Param password body dto.UpdatePassword true "Datos para actualizar la contraseña"
+// @Success 200 {string} string "password updated success"
+// @Failure 400 {string} string "error de validación o formato inválido"
+// @Failure 409 {string} string "customer not found"
+// @Failure 500 {string} string "unexpected error"
+// @Security SessionCookie
+// @Router /customers/password [put]
+func (c *customersHandler) UpdatePassword(e echo.Context) error {
+
+	ctx := e.Request().Context()
+
+	pass := dto.UpdatePassword{}
+
+	if err := e.Bind(&pass); err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+	}
+
+	if err := pass.Validate(); err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+	}
+
+	customer_id, err := uuid.Parse(strings.TrimSpace(fmt.Sprintln(ctx.Value("customer_id"))))
+	if err != nil {
+		fmt.Println("Error al obtener el customer_id")
+		return echo.NewHTTPError(http.StatusInternalServerError, "unexpected error")
+	}
+
+	if err := c.customerApp.UpdatePassword(ctx, customer_id, pass); err != nil {
+		switch err.Error() {
+		case "not found.":
+			return echo.NewHTTPError(http.StatusConflict, "customer not found")
+		default:
+			return echo.NewHTTPError(http.StatusInternalServerError, "unexpected error")
+		}
+	}
+
+	return e.JSON(http.StatusOK, "password updated success")
 }
