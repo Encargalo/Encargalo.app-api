@@ -173,7 +173,7 @@ func (c *customersHandler) UpdateCustomer(e echo.Context) error {
 // @Tags Customers
 // @Accept json
 // @Produce json
-// @Param password body dto.UpdatePassword true "Datos para actualizar la contraseña"
+// @Param password body customers.UpdatePassword true "Datos para actualizar la contraseña"
 // @Success 200 {string} string "password updated success"
 // @Failure 400 {string} string "error de validación o formato inválido"
 // @Failure 409 {string} string "customer not found"

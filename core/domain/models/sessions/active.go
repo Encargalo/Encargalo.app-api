@@ -21,7 +21,6 @@ type ActiveSession struct {
 }
 
 func (a *ActiveSession) BuildActiveSessionModel(userID uuid.UUID, userType, ipUser, userAgent string) {
-
 	a.UserID = userID
 	a.UserType = userType
 	a.IPAddress = ipUser

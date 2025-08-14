@@ -46,7 +46,7 @@ func (c *customersSessionsApp) Sign_In(ctx context.Context, sign_in dto.SignIn) 
 		return uuid.Nil, errors.New("incorrect access data")
 	}
 
-	sessionID, err := c.sessionSVC.RegisterSessions(ctx, customer.ID, "Client")
+	sessionID, err := c.sessionSVC.RegisterSessions(ctx, customer.ID, "Customer")
 	if err != nil {
 		return uuid.Nil, err
 	}

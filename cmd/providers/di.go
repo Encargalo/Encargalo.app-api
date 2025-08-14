@@ -15,6 +15,8 @@ import (
 	"CaliYa/core/app"
 	"CaliYa/core/utils"
 
+	sessionsHand "CaliYa/cmd/api/handler/sessions"
+
 	customersRepo "CaliYa/core/adapters/postgres/repo/customers"
 	customersApp "CaliYa/core/app/customers"
 	sessionsApp "CaliYa/core/app/sessions"
@@ -48,6 +50,7 @@ func BuildContainer() *dig.Container {
 	_ = Container.Provide(groups.NewPromotionsGroup)
 	_ = Container.Provide(groups.NewShopsGroup)
 	_ = Container.Provide(groups.NewCustomersGroup)
+	_ = Container.Provide(groups.NewSessionsGroup)
 
 	_ = Container.Provide(middleware.NewRequestMiddleware)
 	_ = Container.Provide(middleware.NewAuthMidlleware)
@@ -59,6 +62,7 @@ func BuildContainer() *dig.Container {
 	_ = Container.Provide(customers.NewCustomersHandler)
 	_ = Container.Provide(customers.NewSignInCustomers)
 	_ = Container.Provide(customers.NewCustomersAddressHandler)
+	_ = Container.Provide(sessionsHand.NewSessionsHandler)
 
 	_ = Container.Provide(sessionsApp.NewSessionsApp)
 	_ = Container.Provide(app.NewProductsApp)

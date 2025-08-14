@@ -262,6 +262,63 @@ const docTemplate = `{
                 }
             }
         },
+        "/customers/password": {
+            "put": {
+                "security": [
+                    {
+                        "SessionCookie": []
+                    }
+                ],
+                "description": "Permite al cliente autenticado actualizar su contraseña, validando el formato y los requisitos establecidos",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Customers"
+                ],
+                "summary": "Actualiza la contraseña del cliente autenticado",
+                "parameters": [
+                    {
+                        "description": "Datos para actualizar la contraseña",
+                        "name": "password",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/customers.UpdatePassword"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "password updated success",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "error de validación o formato inválido",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "customer not found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "unexpected error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/products/adiciones": {
             "get": {
                 "description": "Devuelve la lista de adiciones filtradas por el ID de la categoría a la que pertenece un producto.",
@@ -574,6 +631,19 @@ const docTemplate = `{
                     "type": "string",
                     "minLength": 3,
                     "example": "Ramírez"
+                }
+            }
+        },
+        "customers.UpdatePassword": {
+            "type": "object",
+            "required": [
+                "password"
+            ],
+            "properties": {
+                "password": {
+                    "type": "string",
+                    "minLength": 8,
+                    "example": "claveSegura123"
                 }
             }
         },

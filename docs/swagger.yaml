@@ -109,6 +109,15 @@ definitions:
     - phone
     - sur_name
     type: object
+  customers.UpdatePassword:
+    properties:
+      password:
+        example: claveSegura123
+        minLength: 8
+        type: string
+    required:
+    - password
+    type: object
   dto.ShopResponse:
     properties:
       address:
@@ -354,6 +363,43 @@ paths:
       summary: Elimina una dirección del cliente autenticado
       tags:
       - Customers Address
+  /customers/password:
+    put:
+      consumes:
+      - application/json
+      description: Permite al cliente autenticado actualizar su contraseña, validando
+        el formato y los requisitos establecidos
+      parameters:
+      - description: Datos para actualizar la contraseña
+        in: body
+        name: password
+        required: true
+        schema:
+          $ref: '#/definitions/customers.UpdatePassword'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: password updated success
+          schema:
+            type: string
+        "400":
+          description: error de validación o formato inválido
+          schema:
+            type: string
+        "409":
+          description: customer not found
+          schema:
+            type: string
+        "500":
+          description: unexpected error
+          schema:
+            type: string
+      security:
+      - SessionCookie: []
+      summary: Actualiza la contraseña del cliente autenticado
+      tags:
+      - Customers
   /products/adiciones:
     get:
       description: Devuelve la lista de adiciones filtradas por el ID de la categoría

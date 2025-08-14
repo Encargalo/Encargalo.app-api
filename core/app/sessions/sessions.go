@@ -27,8 +27,16 @@ func (s *sessionApp) RegisterSessions(ctx context.Context, userID uuid.UUID, use
 
 }
 
-func (s *sessionApp) SearchSessions(ctx context.Context, id uuid.UUID) (sessions.ActiveSession, error) {
-
+func (s *sessionApp) SearchSessions(ctx context.Context, id uuid.UUID) (*sessions.ActiveSession, error) {
 	return s.repo.SearchSessions(ctx, id)
+}
 
+func (s *sessionApp) DeleteSession(ctx context.Context, session_id uuid.UUID) error {
+
+	session, err := s.SearchSessions(ctx, session_id)
+	if err != nil {
+		return err
+	}
+
+	return s.repo.DeleteSession(ctx, session)
 }

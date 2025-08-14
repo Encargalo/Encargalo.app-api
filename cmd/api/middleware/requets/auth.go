@@ -62,6 +62,7 @@ func (a *auth) Auth(next echo.HandlerFunc) echo.HandlerFunc {
 		}
 
 		ctx = context.WithValue(ctx, "customer_id", session.UserID)
+		ctx = context.WithValue(ctx, "session_id", session_id)
 
 		c.SetRequest(c.Request().WithContext(ctx))
 
