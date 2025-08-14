@@ -1,0 +1,122 @@
+package customers
+
+import (
+	dto "CaliYa/core/domain/dto/customers"
+	models "CaliYa/core/domain/models/customers"
+	ports "CaliYa/core/domain/ports/customers"
+	"CaliYa/core/errors"
+	"context"
+	"database/sql"
+	"fmt"
+
+	"github.com/google/uuid"
+	"github.com/uptrace/bun"
+)
+
+type customersRepo struct {
+	db *bun.DB
+}
+
+func NewCustomersRepo(db *bun.DB) ports.CustomersRepo {
+	return &customersRepo{db}
+}
+
+func (c *customersRepo) RegisterCustomer(ctx context.Context, customer *models.Accounts) (*models.Accounts, error) {
+
+	tx, err := c.db.BeginTx(ctx, nil)
+	if err != nil {
+		fmt.Println("error iniciando transacción: %w", err)
+		return nil, errors.ErrUnexpected
+	}
+
+	if _, err := tx.NewInsert().Model(customer).Returning("*").Exec(ctx); err != nil {
+		_ = tx.Rollback()
+		fmt.Println("error al insertar el customer")
+		return nil, errors.ErrUnexpected
+	}
+
+	activationAccount := new(models.ActivateAccount)
+	activationAccount.BuildActivateAccount(customer.ID)
+
+	if _, err := tx.NewInsert().Model(activationAccount).Exec(ctx); err != nil {
+		_ = tx.Rollback()
+		fmt.Println("error al registrar el codigo de activación")
+		return nil, errors.ErrUnexpected
+	}
+
+	if err := tx.Commit(); err != nil {
+		fmt.Println("error al confirmar transacción: %w", err)
+		return nil, errors.ErrUnexpected
+	}
+
+	return customer, nil
+}
+
+func (c *customersRepo) SearchCustomerBy(ctx context.Context, criteria dto.SearchCustomerBy) (*models.Accounts, error) {
+
+	account := new(models.Accounts)
+
+	err := c.db.NewSelect().
+		Model(account).
+		WhereGroup("or", func(sq *bun.SelectQuery) *bun.SelectQuery {
+			if criteria.ID != uuid.Nil {
+				sq = sq.Where("id = ?", criteria.ID)
+			}
+			if criteria.Phone != "" {
+				sq = sq.Where("phone = ?", criteria.Phone)
+			}
+			return sq
+		}).
+		Where("deleted_at IS NULL").
+		Scan(ctx)
+
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, errors.ErrNotFound
+		}
+		return nil, errors.ErrUnexpected
+	}
+
+	return account, nil
+
+}
+
+func (c *customersRepo) SearchCustomerByPhoneAndNotIDEquals(ctx context.Context, customer_id uuid.UUID, phone string) (*models.Accounts, error) {
+
+	account := new(models.Accounts)
+
+	err := c.db.NewSelect().
+		Model(account).
+		Where("phone = ? AND id != ?", phone, customer_id).
+		Scan(ctx)
+
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, errors.ErrNotFound
+		}
+		return nil, errors.ErrUnexpected
+	}
+
+	return account, nil
+
+}
+
+func (c *customersRepo) UpdateCustomer(ctx context.Context, customer_id uuid.UUID, customer *models.Accounts) error {
+
+	if _, err := c.db.NewUpdate().Model(customer).OmitZero().Where("id = ?", customer_id).Exec(ctx); err != nil {
+		fmt.Println(err.Error())
+		return errors.ErrUnexpected
+	}
+
+	return nil
+}
+
+func (c *customersRepo) UpdatePassword(ctx context.Context, customer_id uuid.UUID, customer *models.Accounts) error {
+
+	if _, err := c.db.NewUpdate().Model(customer).OmitZero().Where("id = ?", customer_id).Exec(ctx); err != nil {
+		fmt.Println(err.Error())
+		return errors.ErrUnexpected
+	}
+
+	return nil
+}

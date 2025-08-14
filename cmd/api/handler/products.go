@@ -7,14 +7,13 @@ import (
 	"errors"
 	"net/http"
 
-	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
 )
 
 type Products interface {
 	RegisterProducts(c echo.Context) error
 	GetProductsByCategory(c echo.Context) error
-	GetAdicionesGyCategory(c echo.Context) error
+	GetAdicionesByCategory(c echo.Context) error
 }
 
 type products struct {
@@ -55,7 +54,7 @@ func (p *products) GetProductsByCategory(c echo.Context) error {
 	category := dto.SearchProductsByCategory{}
 
 	if err := c.Bind(&category); err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+		return echo.NewHTTPError(http.StatusBadRequest, "bad request")
 	}
 
 	if err := category.IsValid(); err != nil {
@@ -66,9 +65,9 @@ func (p *products) GetProductsByCategory(c echo.Context) error {
 	if err != nil {
 		switch {
 		case errors.Is(err, calierrors.ErrNotFound):
-			echo.NewHTTPError(http.StatusNotFound, err)
+			return echo.NewHTTPError(http.StatusNotFound, err.Error())
 		default:
-			echo.NewHTTPError(http.StatusInternalServerError, err)
+			return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 		}
 	}
 
@@ -82,16 +81,21 @@ func (p *products) GetProductsByCategory(c echo.Context) error {
 // @Produce json
 // @Param category_id query string true "ID de la categoría (UUID)"
 // @Success 200 {object} []models.Items
-// @Failure 404
-// @Failure 500
+// @Failure 400 {string} string "Se retorna cuando el param se envía vacío o no es un UUID Valido."
+// @Failure 404 {string} string "Se retorna cuando no se encuentran ninguna adición para el category_id enviada."
+// @Failure 500 {string} string "Se retorna cuando ocurre un error inesperado dentro del servidor."
 // @Router /products/adiciones [get]
-func (p *products) GetAdicionesGyCategory(c echo.Context) error {
+func (p *products) GetAdicionesByCategory(c echo.Context) error {
 
 	ctx := c.Request().Context()
 
-	id := c.QueryParam("category_id")
+	categorys := dto.Category{}
 
-	adiciones, err := p.app.GetAditionsByCategory(ctx, uuid.MustParse(id))
+	if err := c.Bind(&categorys); err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, "bad request")
+	}
+
+	adiciones, err := p.app.GetAditionsByCategory(ctx, categorys.ID)
 	if err != nil {
 		switch {
 		case errors.Is(err, calierrors.ErrNotFound):

@@ -11,7 +11,7 @@ type SearchProductsByCategory struct {
 func (s *SearchProductsByCategory) IsValid() error {
 
 	if s.Category == "" {
-		return errors.New("the value cannot be null")
+		return errors.New("the value cannot be empty")
 	}
 
 	if len(s.Category) < 3 {

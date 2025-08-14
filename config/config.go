@@ -24,6 +24,8 @@ type Config struct {
 	Postgres Postgres `env:"postgres"`
 	Mongo    Mongo    `env:"mongo"`
 	Redis    Redis    `env:"redis"`
+	Twilio   Twilio   `env:"twilio"`
+	JWT      JWT      `env:"jwt"`
 }
 
 type Server struct {
@@ -47,6 +49,16 @@ type Redis struct {
 	Port     int    `env:"port"`
 	User     string `env:"user"`
 	Password string `env:"password"`
+}
+
+type Twilio struct {
+	Username string `env:"username"`
+	Password string `env:"password"`
+	Phone    string `env:"phone"`
+}
+
+type JWT struct {
+	Secret string `env:"secret"`
 }
 
 func Environments() {

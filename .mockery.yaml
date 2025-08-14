@@ -7,10 +7,10 @@ with-expecter: False
 outpkg: "mocks"
 packages:
 
-  acortlink/cmd/api/handler:
+  CaliYa/cmd/api/handler:
     config:
     dir: "mocks/cmd/api/handler"
 
-  acortlink/core/domain/ports:
+  CaliYa/core/domain/ports:
     config:
     dir: "mocks/core/domain/ports"
