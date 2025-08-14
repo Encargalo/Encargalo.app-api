@@ -38,7 +38,6 @@ func (c *Accounts) BuildCustomerUpdateModel(customer dto.UpdateCustomer) {
 	c.SurName = customer.SurName
 	c.Phone = customer.Phone
 	c.Email = &customer.Email
-	c.BirthdayDate = customer.BirthdayDate
 	c.UpdatedAt = time.Now()
 }
 

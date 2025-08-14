@@ -18,6 +18,7 @@ type CustomersHandler interface {
 	RegisterCustomer(e echo.Context) error
 	SearchCustomer(e echo.Context) error
 	UpdateCustomer(e echo.Context) error
+	//UpdatePassword(e echo.Context) error
 }
 
 type customersHandler struct {

@@ -90,9 +90,6 @@ definitions:
     type: object
   customers.UpdateCustomer:
     properties:
-      birthday_date:
-        example: "1990-05-20"
-        type: string
       email:
         example: carlos.ramirez@example.com
         type: string
@@ -108,7 +105,6 @@ definitions:
         minLength: 3
         type: string
     required:
-    - birthday_date
     - name
     - phone
     - sur_name
