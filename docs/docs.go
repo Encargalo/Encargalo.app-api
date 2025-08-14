@@ -419,6 +419,43 @@ const docTemplate = `{
                 }
             }
         },
+        "/sessions": {
+            "delete": {
+                "security": [
+                    {
+                        "SessionCookie": []
+                    }
+                ],
+                "description": "Elimina la sesión activa identificada por session_id en la cookie de autenticación",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Sessions"
+                ],
+                "summary": "Cierra la sesión actual del cliente autenticado",
+                "responses": {
+                    "200": {
+                        "description": "session deleted success",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "not found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "unexpected error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/shops": {
             "get": {
                 "produces": [

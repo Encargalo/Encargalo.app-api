@@ -471,6 +471,30 @@ paths:
       summary: Se obtienen todos los productos de una misma categoria.
       tags:
       - Products
+  /sessions:
+    delete:
+      description: Elimina la sesión activa identificada por session_id en la cookie
+        de autenticación
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: session deleted success
+          schema:
+            type: string
+        "404":
+          description: not found
+          schema:
+            type: string
+        "500":
+          description: unexpected error
+          schema:
+            type: string
+      security:
+      - SessionCookie: []
+      summary: Cierra la sesión actual del cliente autenticado
+      tags:
+      - Sessions
   /shops:
     get:
       parameters:

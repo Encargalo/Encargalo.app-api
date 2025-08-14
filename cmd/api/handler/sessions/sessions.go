@@ -23,6 +23,16 @@ func NewSessionsHandler(svc sessions.SessionsApp) SessionsHand {
 	return &sessionshand{svc}
 }
 
+// DeleteSession godoc
+// @Summary Cierra la sesión actual del cliente autenticado
+// @Description Elimina la sesión activa identificada por session_id en la cookie de autenticación
+// @Tags Sessions
+// @Produce json
+// @Success 200 {string} string "session deleted success"
+// @Failure 404 {string} string "not found"
+// @Failure 500 {string} string "unexpected error"
+// @Security SessionCookie
+// @Router /sessions [delete]
 func (s *sessionshand) DeleteSession(e echo.Context) error {
 
 	ctx := e.Request().Context()
