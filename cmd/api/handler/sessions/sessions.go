@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
+	"time"
 
 	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
@@ -51,6 +52,19 @@ func (s *sessionshand) DeleteSession(e echo.Context) error {
 			return echo.NewHTTPError(http.StatusInternalServerError, "unexpected error")
 		}
 	}
+
+	cookie := &http.Cookie{
+		Name:     "Sessions",
+		Value:    "",
+		Secure:   true,
+		SameSite: http.SameSiteNoneMode,
+		HttpOnly: true,
+		Path:     "/",
+		Expires:  time.Unix(0, 0), // Fecha en el pasado
+		MaxAge:   -1,              // Forzar eliminación
+	}
+
+	e.SetCookie(cookie)
 
 	return e.JSON(http.StatusOK, "session deleted success")
 }
