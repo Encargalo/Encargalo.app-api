@@ -41,22 +41,18 @@ definitions:
       email:
         example: carlos.ramirez@example.com
         type: string
+      id:
+        example: 123e4567-e89b-12d3-a456-426614174000
+        type: string
       name:
         example: Carlos
-        minLength: 3
         type: string
       phone:
         example: "+573001112233"
         type: string
       sur_name:
         example: Ramírez
-        minLength: 3
         type: string
-    required:
-    - birthday_date
-    - name
-    - phone
-    - sur_name
     type: object
   customers.RegisterCustomer:
     properties:
@@ -154,6 +150,8 @@ definitions:
     type: object
   models.Items:
     properties:
+      category_id:
+        type: string
       description:
         type: string
       id:

@@ -573,12 +573,6 @@ const docTemplate = `{
         },
         "customers.CustomerResponse": {
             "type": "object",
-            "required": [
-                "birthday_date",
-                "name",
-                "phone",
-                "sur_name"
-            ],
             "properties": {
                 "birthday_date": {
                     "type": "string",
@@ -588,9 +582,12 @@ const docTemplate = `{
                     "type": "string",
                     "example": "carlos.ramirez@example.com"
                 },
+                "id": {
+                    "type": "string",
+                    "example": "123e4567-e89b-12d3-a456-426614174000"
+                },
                 "name": {
                     "type": "string",
-                    "minLength": 3,
                     "example": "Carlos"
                 },
                 "phone": {
@@ -599,7 +596,6 @@ const docTemplate = `{
                 },
                 "sur_name": {
                     "type": "string",
-                    "minLength": 3,
                     "example": "Ramírez"
                 }
             }
@@ -739,6 +735,9 @@ const docTemplate = `{
         "models.Items": {
             "type": "object",
             "properties": {
+                "category_id": {
+                    "type": "string"
+                },
                 "description": {
                     "type": "string"
                 },
