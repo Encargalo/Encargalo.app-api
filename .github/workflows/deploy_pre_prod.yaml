@@ -20,7 +20,7 @@ jobs:
 
     - name: Deploy via SSH with rollback
       run: |
-        ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER_PRE_PROD }}@${{ secrets.HOST_PRE_PROD }} << 'EOF'
+        ssh -o StrictHostKeyChecking=no ${{ secrets.USER_PRE_PROD }}@${{ secrets.HOST_PRE_PROD }} << 'EOF'
           set -e  # Sale si cualquier comando falla
 
           cd develop/encargalo/Encargalo.app-api
