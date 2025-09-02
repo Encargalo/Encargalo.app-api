@@ -23,7 +23,7 @@ jobs:
         ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER_PRE_PROD }}@${{ secrets.HOST_PRE_PROD }} << 'EOF'
           set -e  # Sale si cualquier comando falla
 
-          cd /home/encargalo/develop/encargalo/Encargalo.app-api
+          cd develop/encargalo/Encargalo.app-api
 
           # Sincronizar con develop
           git fetch origin
