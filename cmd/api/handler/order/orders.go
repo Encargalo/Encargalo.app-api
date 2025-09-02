@@ -1,7 +1,7 @@
-package handler
+package order
 
 import (
-	"CaliYa/core/domain/models"
+	"CaliYa/core/domain/dto/order"
 	"CaliYa/core/domain/ports"
 	"net/http"
 
@@ -22,17 +22,21 @@ func NewOrdersHandler(app ports.OrdersApp) Orders {
 
 func (o *orders) RegisterOrder(c echo.Context) error {
 
-	ctx := c.Request().Context()
+	//ctx := c.Request().Context()
 
-	order := models.Order{}
+	order := order.CreateOrder{}
 
 	if err := c.Bind(&order); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, "bad request")
 	}
 
-	if err := o.app.RegisterOrders(ctx, order); err != nil {
-		return err
+	if err := order.Validate(); err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
+
+	// if err := o.app.RegisterOrders(ctx, order); err != nil {
+	// 	return err
+	// }
 
 	return c.JSON(http.StatusCreated, "order created success.")
 }

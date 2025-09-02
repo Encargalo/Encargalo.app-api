@@ -1,7 +1,7 @@
 package groups
 
 import (
-	"CaliYa/cmd/api/handler"
+	"CaliYa/cmd/api/handler/order"
 
 	"github.com/labstack/echo/v4"
 )
@@ -11,10 +11,10 @@ type OrdersGroup interface {
 }
 
 type ordersGroup struct {
-	handlerOrders handler.Orders
+	handlerOrders order.Orders
 }
 
-func NewOrdersGroup(handlerOrders handler.Orders) OrdersGroup {
+func NewOrdersGroup(handlerOrders order.Orders) OrdersGroup {
 	return &ordersGroup{handlerOrders}
 }
 

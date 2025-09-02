@@ -31,7 +31,7 @@ type ItemsOrders struct {
 
 	ItemID      uuid.UUID `bun:"item_id" json:"item_id" validate:"required,uuid4" mold:"trim" example:"9ad8b85b-b847-4f15-a0ce-6415b7e335f0"`
 	OrderID     uuid.UUID `bun:"order_id" swaggerignore:"true"`
-	CantItem    int       `bun:"cant_item" json:"cant_item" validate:"required" mold:"trim" example:"2"`
+	Amount      int       `bun:"amount" json:"cant_item" validate:"required" mold:"trim" example:"2"`
 	UnitPrice   int       `bun:"unit_price" swaggerignore:"true"`
 	TotalPrice  int       `bun:"total_price" swaggerignore:"true"`
 	Observation string    `bun:"observation" json:"observation" example:"Con todas las salsas."`

@@ -42,7 +42,7 @@ func (a *Address) ToDomainDTO() customers.Address {
 		Alias:     a.Alias,
 		Address:   a.Address,
 		Reference: a.Reference,
-		Cords: customers.Cords{
+		Cords: customers.Coords{
 			Latitude:  a.Latitude,
 			Longitude: a.Longitude,
 		},

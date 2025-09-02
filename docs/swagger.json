@@ -538,7 +538,7 @@
                     "example": "Casa principal"
                 },
                 "coords": {
-                    "$ref": "#/definitions/customers.Cords"
+                    "$ref": "#/definitions/customers.Coords"
                 },
                 "id": {
                     "type": "string"
@@ -549,7 +549,7 @@
                 }
             }
         },
-        "customers.Cords": {
+        "customers.Coords": {
             "type": "object",
             "required": [
                 "lat",

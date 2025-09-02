@@ -9,7 +9,7 @@ definitions:
         example: Casa principal
         type: string
       coords:
-        $ref: '#/definitions/customers.Cords'
+        $ref: '#/definitions/customers.Coords'
       id:
         type: string
       reference:
@@ -21,7 +21,7 @@ definitions:
     - coords
     - reference
     type: object
-  customers.Cords:
+  customers.Coords:
     properties:
       lat:
         example: 4.60971

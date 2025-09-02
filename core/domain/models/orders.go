@@ -50,7 +50,7 @@ func (o *Order) SetPrices(items []Items) {
 
 				var subTotal int
 
-				subTotal += item.Price * io.CantItem
+				subTotal += item.Price * io.Amount
 
 				o.ItemsOrders[i].TotalPrice = subTotal
 				o.ItemsOrders[i].UnitPrice = item.Price

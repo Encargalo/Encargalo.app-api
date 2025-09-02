@@ -543,7 +543,7 @@ const docTemplate = `{
                     "example": "Casa principal"
                 },
                 "coords": {
-                    "$ref": "#/definitions/customers.Cords"
+                    "$ref": "#/definitions/customers.Coords"
                 },
                 "id": {
                     "type": "string"
@@ -554,7 +554,7 @@ const docTemplate = `{
                 }
             }
         },
-        "customers.Cords": {
+        "customers.Coords": {
             "type": "object",
             "required": [
                 "lat",
