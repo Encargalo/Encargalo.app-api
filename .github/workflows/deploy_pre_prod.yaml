@@ -21,7 +21,7 @@ jobs:
           set -e
 
           # Ruta donde quieres clonar el repo
-          cd /ruta/deseada
+          cd /develop/encargalo/Encargalo.app-api
 
           # Clonar el repositorio (si ya existe, puedes borrar o hacer pull)
           if [ ! -d "Encargalo.app-api" ]; then
