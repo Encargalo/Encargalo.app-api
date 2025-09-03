@@ -1,4 +1,4 @@
-name: Deploy pre-production
+name: Clone Repository on Merge
 
 on:
   push:
@@ -6,67 +6,29 @@ on:
       - develop
 
 jobs:
-  deploy:
+  clone:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
-
     - name: Set up SSH
       uses: webfactory/ssh-agent@v0.9.0
       with:
         ssh-private-key: ${{ secrets.KEY_PRE_PROD }}
 
-    - name: Deploy via SSH with rollback
+    - name: Clone repository on remote server
       run: |
         ssh -o StrictHostKeyChecking=no ${{ secrets.USER_PRE_PROD }}@${{ secrets.HOST_PRE_PROD }} << 'EOF'
-          set -e  # Sale si cualquier comando falla
+          set -e
 
-          cd develop/encargalo/Encargalo.app-api
+          # Ruta donde quieres clonar el repo
+          cd /ruta/deseada
 
-          # Sincronizar con develop
-          git fetch origin
-          git reset --hard origin/develop
-
-          # Crear tag único para la build
-          TIMESTAMP=$(date +%Y%m%d%H%M%S)
-          IMAGE_NAME="Encargalo-api:${TIMESTAMP}"
-
-          # Build de la nueva imagen
-          docker build -t $IMAGE_NAME .
-
-          # Cargar variables de entorno si existe .env
-          ENV_FILE="../.env"
-          ENV_ARG=""
-          if [ -f $ENV_FILE ]; then
-            ENV_ARG="--env-file $ENV_FILE"
-          fi
-
-          # Detener temporalmente contenedor anterior solo si existe
-          PREV_CONTAINER=$(docker ps -q -f name=Encargalo-api)
-          
-          # Levantar nuevo contenedor en paralelo
-          docker run -d $ENV_ARG --name Encargalo-api -p 3000:3000 $IMAGE_NAME
-
-          # Esperar unos segundos para verificar que arrancó correctamente
-          sleep 10
-
-          # Chequear estado
-          STATUS=$(docker inspect -f '{{.State.Running}}' Encargalo-api)
-          if [ "$STATUS" = "true" ]; then
-              # Si está bien, remover contenedor viejo y renombrar nuevo
-              if [ -n "$PREV_CONTAINER" ]; then
-                  docker stop mi-app
-                  docker rm mi-app
-              fi
-              docker rename mi-app_new mi-app
-              echo "Despliegue exitoso: $IMAGE_NAME"
+          # Clonar el repositorio (si ya existe, puedes borrar o hacer pull)
+          if [ ! -d "Encargalo.app-api" ]; then
+            git clone https://github.com/tu_usuario/tu_repo.git Encargalo.app-api
           else
-              # Si falla, eliminar contenedor nuevo
-              docker logs Encargalo-api
-              docker rm -f Encargalo-api
-              echo "Despliegue fallido, rollback al contenedor anterior"
-              exit 1
+            cd Encargalo.app-api
+            git fetch origin
+            git reset --hard origin/develop
           fi
         EOF
