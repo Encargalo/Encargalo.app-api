@@ -25,7 +25,7 @@ jobs:
 
           # Clonar el repositorio (si ya existe, puedes borrar o hacer pull)
           if [ ! -d "Encargalo.app-api" ]; then
-            git clone https://github.com/tu_usuario/tu_repo.git Encargalo.app-api
+            git clone git@github.com:Encargalo/Encargalo.app-api.git
           else
             cd Encargalo.app-api
             git fetch origin
