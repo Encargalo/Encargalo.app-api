@@ -16,6 +16,8 @@ import (
 // @Schemes http
 func main() {
 
+	//Comentario de prueba
+
 	container := providers.BuildContainer()
 
 	if err := container.Invoke(func(router *router.Router, server *echo.Echo, config config.Config) {
