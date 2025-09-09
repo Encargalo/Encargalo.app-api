@@ -2,6 +2,7 @@ package repo
 
 import (
 	"CaliYa/core/domain/models"
+	ordersModels "CaliYa/core/domain/models/orders"
 	"CaliYa/core/domain/ports"
 	"context"
 	"fmt"
@@ -17,20 +18,18 @@ func NewOrdersRepo(db *bun.DB) ports.OrdersRepo {
 	return &orders{db}
 }
 
-func (o *orders) RegisterOrders(ctx context.Context, order *models.Order) error {
+func (o *orders) RegisterOrders(ctx context.Context, order *ordersModels.Order) error {
 
 	tx, err := o.db.BeginTx(ctx, nil)
 	if err != nil {
 		return fmt.Errorf("error iniciando transacción: %w", err)
 	}
 
-	o.CalculatePrice(ctx, order)
-
 	if _, err := tx.NewInsert().Model(order).Exec(ctx); err != nil {
 		return fmt.Errorf("error insertando orden: %w", err)
 	}
 
-	if _, err := tx.NewInsert().Model(order.ItemsOrders).Exec(ctx); err != nil {
+	if _, err := tx.NewInsert().Model(&order.ItemsOrder).Exec(ctx); err != nil {
 		return fmt.Errorf("error insertando items: %w", err)
 	}
 
@@ -41,7 +40,7 @@ func (o *orders) RegisterOrders(ctx context.Context, order *models.Order) error 
 	return nil
 }
 
-func (o *orders) CalculatePrice(ctx context.Context, orders *models.Order) {
+func (o *orders) CalculatePrice(ctx context.Context, orders *ordersModels.Order) {
 
 	var items []models.Items
 

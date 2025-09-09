@@ -742,6 +742,9 @@
                 "image": {
                     "type": "string"
                 },
+                "isAvailable": {
+                    "type": "boolean"
+                },
                 "name": {
                     "type": "string"
                 },
@@ -749,7 +752,7 @@
                     "type": "integer"
                 },
                 "score": {
-                    "type": "integer"
+                    "type": "number"
                 },
                 "shop": {
                     "$ref": "#/definitions/models.ProductsShops"
@@ -782,6 +785,9 @@
                 },
                 "opened": {
                     "type": "boolean"
+                },
+                "phone": {
+                    "type": "string"
                 },
                 "score": {
                     "type": "number"

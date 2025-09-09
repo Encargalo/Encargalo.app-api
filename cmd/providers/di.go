@@ -20,6 +20,7 @@ import (
 
 	customersRepo "CaliYa/core/adapters/postgres/repo/customers"
 	customersApp "CaliYa/core/app/customers"
+	"CaliYa/core/app/orders"
 	sessionsApp "CaliYa/core/app/sessions"
 
 	"github.com/labstack/echo/v4"
@@ -67,7 +68,7 @@ func BuildContainer() *dig.Container {
 
 	_ = Container.Provide(sessionsApp.NewSessionsApp)
 	_ = Container.Provide(app.NewProductsApp)
-	_ = Container.Provide(app.NewOrdersApp)
+	_ = Container.Provide(orders.NewOrdersApp)
 	_ = Container.Provide(app.NewPromotionsApp)
 	_ = Container.Provide(app.NewShopsApp)
 	_ = Container.Provide(customersApp.NewCustomerApp)

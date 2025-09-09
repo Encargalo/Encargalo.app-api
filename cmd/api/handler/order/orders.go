@@ -3,8 +3,11 @@ package order
 import (
 	"CaliYa/core/domain/dto/order"
 	"CaliYa/core/domain/ports"
+	"fmt"
 	"net/http"
+	"strings"
 
+	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
 )
 
@@ -22,7 +25,7 @@ func NewOrdersHandler(app ports.OrdersApp) Orders {
 
 func (o *orders) RegisterOrder(c echo.Context) error {
 
-	//ctx := c.Request().Context()
+	ctx := c.Request().Context()
 
 	order := order.CreateOrder{}
 
@@ -34,9 +37,17 @@ func (o *orders) RegisterOrder(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
-	// if err := o.app.RegisterOrders(ctx, order); err != nil {
-	// 	return err
-	// }
+	custoID, err := uuid.Parse(strings.TrimSpace(fmt.Sprintln(ctx.Value("customer_id"))))
+	if err != nil {
+		fmt.Println("Error al obtener el customer_id")
+		return echo.NewHTTPError(http.StatusInternalServerError, "unexpected error")
+	}
+
+	order.CustomerID = custoID
+
+	if err := o.app.RegisterOrders(ctx, order); err != nil {
+		return err
+	}
 
 	return c.JSON(http.StatusCreated, "order created success.")
 }

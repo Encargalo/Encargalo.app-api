@@ -747,6 +747,9 @@ const docTemplate = `{
                 "image": {
                     "type": "string"
                 },
+                "isAvailable": {
+                    "type": "boolean"
+                },
                 "name": {
                     "type": "string"
                 },
@@ -754,7 +757,7 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "score": {
-                    "type": "integer"
+                    "type": "number"
                 },
                 "shop": {
                     "$ref": "#/definitions/models.ProductsShops"
@@ -787,6 +790,9 @@ const docTemplate = `{
                 },
                 "opened": {
                     "type": "boolean"
+                },
+                "phone": {
+                    "type": "string"
                 },
                 "score": {
                     "type": "number"

@@ -3,7 +3,7 @@
 package mocks
 
 import (
-	models "CaliYa/core/domain/models"
+	"CaliYa/core/domain/models/orders"
 	context "context"
 
 	mock "github.com/stretchr/testify/mock"
@@ -15,7 +15,7 @@ type OrdersApp struct {
 }
 
 // RegisterOrders provides a mock function with given fields: ctx, order
-func (_m *OrdersApp) RegisterOrders(ctx context.Context, order models.Order) error {
+func (_m *OrdersApp) RegisterOrders(ctx context.Context, order orders.Order) error {
 	ret := _m.Called(ctx, order)
 
 	if len(ret) == 0 {
@@ -23,7 +23,7 @@ func (_m *OrdersApp) RegisterOrders(ctx context.Context, order models.Order) err
 	}
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(context.Context, models.Order) error); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, orders.Order) error); ok {
 		r0 = rf(ctx, order)
 	} else {
 		r0 = ret.Error(0)
