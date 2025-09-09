@@ -13,6 +13,7 @@ type ProductsShops struct {
 	Tag       string    `json:"tag"`
 	LogoImage string    `bun:"logo_image" json:"logo_image"`
 	Address   string    `bun:"address" json:"address"`
+	Phone     string    `bun:"home_phone" json:"phone"`
 	Score     float32   `bun:"score" json:"score"`
 	Opened    bool      `bun:"opened" json:"opened"`
 

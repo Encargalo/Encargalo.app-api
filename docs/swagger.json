@@ -257,7 +257,7 @@
                 }
             }
         },
-        "/customers/password": {
+        "/customers/change-password": {
             "put": {
                 "security": [
                     {
@@ -538,7 +538,7 @@
                     "example": "Casa principal"
                 },
                 "coords": {
-                    "$ref": "#/definitions/customers.Cords"
+                    "$ref": "#/definitions/customers.Coords"
                 },
                 "id": {
                     "type": "string"
@@ -549,7 +549,7 @@
                 }
             }
         },
-        "customers.Cords": {
+        "customers.Coords": {
             "type": "object",
             "required": [
                 "lat",
@@ -568,12 +568,6 @@
         },
         "customers.CustomerResponse": {
             "type": "object",
-            "required": [
-                "birthday_date",
-                "name",
-                "phone",
-                "sur_name"
-            ],
             "properties": {
                 "birthday_date": {
                     "type": "string",
@@ -583,9 +577,12 @@
                     "type": "string",
                     "example": "carlos.ramirez@example.com"
                 },
+                "id": {
+                    "type": "string",
+                    "example": "123e4567-e89b-12d3-a456-426614174000"
+                },
                 "name": {
                     "type": "string",
-                    "minLength": 3,
                     "example": "Carlos"
                 },
                 "phone": {
@@ -594,7 +591,6 @@
                 },
                 "sur_name": {
                     "type": "string",
-                    "minLength": 3,
                     "example": "Ramírez"
                 }
             }
@@ -734,6 +730,9 @@
         "models.Items": {
             "type": "object",
             "properties": {
+                "category_id": {
+                    "type": "string"
+                },
                 "description": {
                     "type": "string"
                 },
@@ -743,6 +742,9 @@
                 "image": {
                     "type": "string"
                 },
+                "isAvailable": {
+                    "type": "boolean"
+                },
                 "name": {
                     "type": "string"
                 },
@@ -750,7 +752,7 @@
                     "type": "integer"
                 },
                 "score": {
-                    "type": "integer"
+                    "type": "number"
                 },
                 "shop": {
                     "$ref": "#/definitions/models.ProductsShops"
@@ -783,6 +785,9 @@
                 },
                 "opened": {
                     "type": "boolean"
+                },
+                "phone": {
+                    "type": "string"
                 },
                 "score": {
                     "type": "number"

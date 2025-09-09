@@ -7,6 +7,7 @@ import (
 
 	"github.com/go-playground/mold/modifiers"
 	"github.com/go-playground/validator/v10"
+	"github.com/google/uuid"
 )
 
 var (
@@ -71,9 +72,10 @@ func (c *UpdatePassword) Validate() error {
 }
 
 type CustomerResponse struct {
-	Name         string `json:"name" validate:"required,min=3" example:"Carlos"`
-	SurName      string `json:"sur_name" validate:"required,min=3" example:"Ramírez"`
-	Phone        string `json:"phone" validate:"required,e164" example:"+573001112233"`
-	Email        string `json:"email" example:"carlos.ramirez@example.com"`
-	BirthdayDate string `json:"birthday_date" validate:"required,datetime=2006-01-02" example:"1990-05-20"`
+	ID           uuid.UUID `json:"id" example:"123e4567-e89b-12d3-a456-426614174000"`
+	Name         string    `json:"name" example:"Carlos"`
+	SurName      string    `json:"sur_name" example:"Ramírez"`
+	Phone        string    `json:"phone" example:"+573001112233"`
+	Email        string    `json:"email" example:"carlos.ramirez@example.com"`
+	BirthdayDate string    `json:"birthday_date" example:"1990-05-20"`
 }

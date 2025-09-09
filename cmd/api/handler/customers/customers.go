@@ -179,7 +179,7 @@ func (c *customersHandler) UpdateCustomer(e echo.Context) error {
 // @Failure 409 {string} string "customer not found"
 // @Failure 500 {string} string "unexpected error"
 // @Security SessionCookie
-// @Router /customers/password [put]
+// @Router /customers/change-password [put]
 func (c *customersHandler) UpdatePassword(e echo.Context) error {
 
 	ctx := e.Request().Context()

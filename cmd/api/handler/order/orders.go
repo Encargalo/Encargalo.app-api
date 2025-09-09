@@ -1,10 +1,13 @@
-package handler
+package order
 
 import (
-	"CaliYa/core/domain/models"
+	"CaliYa/core/domain/dto/order"
 	"CaliYa/core/domain/ports"
+	"fmt"
 	"net/http"
+	"strings"
 
+	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
 )
 
@@ -24,11 +27,23 @@ func (o *orders) RegisterOrder(c echo.Context) error {
 
 	ctx := c.Request().Context()
 
-	order := models.Order{}
+	order := order.CreateOrder{}
 
 	if err := c.Bind(&order); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, "bad request")
 	}
+
+	if err := order.Validate(); err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+	}
+
+	custoID, err := uuid.Parse(strings.TrimSpace(fmt.Sprintln(ctx.Value("customer_id"))))
+	if err != nil {
+		fmt.Println("Error al obtener el customer_id")
+		return echo.NewHTTPError(http.StatusInternalServerError, "unexpected error")
+	}
+
+	order.CustomerID = custoID
 
 	if err := o.app.RegisterOrders(ctx, order); err != nil {
 		return err

@@ -3,6 +3,7 @@ package providers
 import (
 	"CaliYa/cmd/api/handler"
 	"CaliYa/cmd/api/handler/customers"
+	"CaliYa/cmd/api/handler/order"
 	middleware "CaliYa/cmd/api/middleware/requets"
 	"CaliYa/cmd/api/router"
 	"CaliYa/cmd/api/router/groups"
@@ -19,6 +20,7 @@ import (
 
 	customersRepo "CaliYa/core/adapters/postgres/repo/customers"
 	customersApp "CaliYa/core/app/customers"
+	"CaliYa/core/app/orders"
 	sessionsApp "CaliYa/core/app/sessions"
 
 	"github.com/labstack/echo/v4"
@@ -56,7 +58,7 @@ func BuildContainer() *dig.Container {
 	_ = Container.Provide(middleware.NewAuthMidlleware)
 
 	_ = Container.Provide(handler.NewProducts)
-	_ = Container.Provide(handler.NewOrdersHandler)
+	_ = Container.Provide(order.NewOrdersHandler)
 	_ = Container.Provide(handler.NewPromos)
 	_ = Container.Provide(handler.NewShopsHandler)
 	_ = Container.Provide(customers.NewCustomersHandler)
@@ -66,7 +68,7 @@ func BuildContainer() *dig.Container {
 
 	_ = Container.Provide(sessionsApp.NewSessionsApp)
 	_ = Container.Provide(app.NewProductsApp)
-	_ = Container.Provide(app.NewOrdersApp)
+	_ = Container.Provide(orders.NewOrdersApp)
 	_ = Container.Provide(app.NewPromotionsApp)
 	_ = Container.Provide(app.NewShopsApp)
 	_ = Container.Provide(customersApp.NewCustomerApp)

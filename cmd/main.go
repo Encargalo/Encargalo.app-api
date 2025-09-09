@@ -12,7 +12,6 @@ import (
 
 // @title Documentation API CaliYa
 // @version 1.0.1
-
 // @BasePath /api
 // @Schemes http
 func main() {

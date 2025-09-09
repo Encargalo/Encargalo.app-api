@@ -13,10 +13,10 @@ type Address struct {
 	Alias     string    `json:"alias" validate:"required" example:"Casa principal"`
 	Address   string    `json:"address" validate:"required" example:"Calle 123 # 45-67"`
 	Reference string    `json:"reference" validate:"required" example:"Frente al parque de los niños"`
-	Cords     Cords     `json:"coords" validate:"required"`
+	Cords     Coords    `json:"coords" validate:"required"`
 }
 
-type Cords struct {
+type Coords struct {
 	Latitude  float64 `json:"lat" validate:"required,latitude" example:"4.609710"`
 	Longitude float64 `json:"long" validate:"required,longitude" example:"-74.081750"`
 }
