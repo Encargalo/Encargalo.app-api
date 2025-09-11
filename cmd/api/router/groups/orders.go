@@ -8,7 +8,7 @@ import (
 )
 
 type OrdersGroup interface {
-	Resource(g *echo.Group)
+	Resource(g *echo.Echo)
 }
 
 type ordersGroup struct {
@@ -21,6 +21,6 @@ func NewOrdersGroup(handlerOrders order.Orders, middleAuth middleware.AuthMiddle
 	return &ordersGroup{handlerOrders, middleAuth, middleReqInfo}
 }
 
-func (o *ordersGroup) Resource(g *echo.Group) {
+func (o *ordersGroup) Resource(g *echo.Echo) {
 	g.POST("/order", o.handlerOrders.RegisterOrder, o.middleAuth.Auth, o.middleReqInfo.GetRequestInfo)
 }

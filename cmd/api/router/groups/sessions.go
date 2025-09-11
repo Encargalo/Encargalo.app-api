@@ -8,7 +8,7 @@ import (
 )
 
 type SessionsGroup interface {
-	Resource(g *echo.Group)
+	Resource(g *echo.Echo)
 }
 
 type sessionsGroup struct {
@@ -27,6 +27,6 @@ func NewSessionsGroup(
 		handlerSessions}
 }
 
-func (s *sessionsGroup) Resource(g *echo.Group) {
+func (s *sessionsGroup) Resource(g *echo.Echo) {
 	g.DELETE("/sessions", s.handlerSessions.DeleteSession, s.middle.GetRequestInfo, s.middleAuth.Auth)
 }

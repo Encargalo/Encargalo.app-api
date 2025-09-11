@@ -8,7 +8,7 @@ import (
 )
 
 type CustomersGroup interface {
-	Resource(g *echo.Group)
+	Resource(g *echo.Echo)
 }
 
 type customersGroup struct {
@@ -33,7 +33,7 @@ func NewCustomersGroup(
 		handlerCustomers}
 }
 
-func (o *customersGroup) Resource(g *echo.Group) {
+func (o *customersGroup) Resource(g *echo.Echo) {
 	g.POST("/customers/sign_in", o.handlersignIn.CreateSession, o.middle.GetRequestInfo)
 	g.POST("/customers", o.handlerCustomers.RegisterCustomer, o.middle.GetRequestInfo)
 	g.GET("/customers", o.handlerCustomers.SearchCustomer, o.middle.GetRequestInfo, o.middleAuth.Auth)

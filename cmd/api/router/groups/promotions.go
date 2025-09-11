@@ -7,7 +7,7 @@ import (
 )
 
 type PromotionsGroup interface {
-	Resource(g *echo.Group)
+	Resource(g *echo.Echo)
 }
 
 type promotionsGroup struct {
@@ -18,6 +18,6 @@ func NewPromotionsGroup(handlerPromotions handler.Promos) PromotionsGroup {
 	return &promotionsGroup{handlerPromotions}
 }
 
-func (p *promotionsGroup) Resource(g *echo.Group) {
+func (p *promotionsGroup) Resource(g *echo.Echo) {
 	g.GET("/promotions", p.handlerPromotions.GetPromos)
 }
