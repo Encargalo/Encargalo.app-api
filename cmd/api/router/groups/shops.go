@@ -7,7 +7,7 @@ import (
 )
 
 type ShopsGroup interface {
-	Resource(g *echo.Group)
+	Resource(g *echo.Echo)
 }
 
 type shopGroup struct {
@@ -18,7 +18,7 @@ func NewShopsGroup(handlerShops handler.Shops) ShopsGroup {
 	return &shopGroup{handlerShops}
 }
 
-func (s *shopGroup) Resource(g *echo.Group) {
+func (s *shopGroup) Resource(g *echo.Echo) {
 	g.GET("/shops/all", s.handlerShops.GetAllShops)
 	g.GET("/shops", s.handlerShops.GetShopsBy)
 }

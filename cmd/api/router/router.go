@@ -50,7 +50,7 @@ func (r *Router) Init() {
 	}))
 
 	r.server.Use(middleware.CORSWithConfig(middleware.CORSConfig{
-		AllowOrigins:                             []string{"*"},
+		AllowOrigins:                             []string{"https://encargalo.app"},
 		AllowMethods:                             []string{http.MethodGet, http.MethodHead, http.MethodPut, http.MethodPatch, http.MethodPost, http.MethodDelete, http.MethodOptions},
 		AllowHeaders:                             []string{echo.HeaderContentType},
 		AllowCredentials:                         true,
@@ -59,14 +59,13 @@ func (r *Router) Init() {
 
 	r.server.Use(middleware.Recover())
 
-	basePath := r.server.Group("/api") //customize your basePath
-	basePath.GET("/health", handler.HealthCheck)
-	basePath.GET("/docs/*", echoSwagger.EchoWrapHandler())
+	r.server.GET("/health", handler.HealthCheck)
+	r.server.GET("/docs/*", echoSwagger.EchoWrapHandler())
 
-	r.productsGroup.Resource(basePath)
-	r.orderGroup.Resource(basePath)
-	r.promotionsGroup.Resource(basePath)
-	r.shopsGroup.Resource(basePath)
-	r.customersGroup.Resource(basePath)
-	r.sessionsGroup.Resource(basePath)
+	r.productsGroup.Resource(r.server)
+	r.orderGroup.Resource(r.server)
+	r.promotionsGroup.Resource(r.server)
+	r.shopsGroup.Resource(r.server)
+	r.customersGroup.Resource(r.server)
+	r.sessionsGroup.Resource(r.server)
 }
