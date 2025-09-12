@@ -26,6 +26,7 @@ type Config struct {
 	Redis    Redis    `env:"redis"`
 	Twilio   Twilio   `env:"twilio"`
 	JWT      JWT      `env:"jwt"`
+	Allowed  Allowed  `env:"allowed"`
 }
 
 type Server struct {
@@ -59,6 +60,10 @@ type Twilio struct {
 
 type JWT struct {
 	Secret string `env:"secret"`
+}
+
+type Allowed struct {
+	Origins string `env:"origins"`
 }
 
 func Environments() {
