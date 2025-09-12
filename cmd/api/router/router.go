@@ -3,6 +3,7 @@ package router
 import (
 	"CaliYa/cmd/api/handler"
 	"CaliYa/cmd/api/router/groups"
+	"CaliYa/config"
 	"net/http"
 
 	_ "CaliYa/docs"
@@ -21,6 +22,7 @@ type Router struct {
 	shopsGroup      groups.ShopsGroup
 	customersGroup  groups.CustomersGroup
 	sessionsGroup   groups.SessionsGroup
+	config          config.Config
 }
 
 func New(
@@ -31,6 +33,7 @@ func New(
 	shopsGroup groups.ShopsGroup,
 	customersGroup groups.CustomersGroup,
 	sessionsGroup groups.SessionsGroup,
+	config config.Config,
 ) *Router {
 	return &Router{
 		server,
@@ -40,6 +43,7 @@ func New(
 		shopsGroup,
 		customersGroup,
 		sessionsGroup,
+		config,
 	}
 }
 
@@ -50,7 +54,7 @@ func (r *Router) Init() {
 	}))
 
 	r.server.Use(middleware.CORSWithConfig(middleware.CORSConfig{
-		AllowOrigins:                             []string{"https://encargalo.app"},
+		AllowOrigins:                             []string{r.config.Allowed.Origins},
 		AllowMethods:                             []string{http.MethodGet, http.MethodHead, http.MethodPut, http.MethodPatch, http.MethodPost, http.MethodDelete, http.MethodOptions},
 		AllowHeaders:                             []string{echo.HeaderContentType},
 		AllowCredentials:                         true,
