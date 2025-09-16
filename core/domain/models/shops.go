@@ -23,6 +23,7 @@ type Shop struct {
 	Latitude      *float64   `bun:"type:float"`
 	Longitude     *float64   `bun:"type:float"`
 	LogoImage     string     `bun:"type:varchar"`
+	Banner        string     `bun:"type:varchar"`
 	Opened        bool       `bun:"default:false"`
 	Type          string     `bun:"type:varchar,notnull"`
 	Score         float64    `bun:"default:0"`
@@ -40,6 +41,7 @@ func (s *Shop) ToDomainDTO() dto.ShopResponse {
 		Address:   s.Address,
 		HomePhone: s.HomePhone,
 		Logo:      s.LogoImage,
+		Banner:    s.Banner,
 		Opened:    s.Opened,
 		Type:      s.Type,
 		Score:     s.Score,

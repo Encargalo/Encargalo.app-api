@@ -118,6 +118,8 @@ definitions:
     properties:
       address:
         type: string
+      banner:
+        type: string
       home_phone:
         type: string
       id:
@@ -174,6 +176,8 @@ definitions:
   models.ProductsShops:
     properties:
       address:
+        type: string
+      banner:
         type: string
       categories:
         items:
