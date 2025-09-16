@@ -30,7 +30,7 @@ func (s *shopsRepo) GetAllShops(ctx context.Context) (dto.ShopsResponse, error) 
 	var shops models.Shops
 
 	if err := s.db.NewSelect().Model(&shops).Order("score DESC").
-		Where("license_status = ? and opened = ?", "active", true).
+		Where("license_status = ? and opened = ? and tag != ?", "active", true, "test").
 		Scan(ctx); err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return dto.ShopsResponse{}, fmt.Errorf("shops %v", calierrors.ErrNotFound)
