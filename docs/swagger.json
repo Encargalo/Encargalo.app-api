@@ -681,6 +681,9 @@
                 "address": {
                     "type": "string"
                 },
+                "banner": {
+                    "type": "string"
+                },
                 "home_phone": {
                     "type": "string"
                 },
@@ -766,6 +769,9 @@
             "type": "object",
             "properties": {
                 "address": {
+                    "type": "string"
+                },
+                "banner": {
                     "type": "string"
                 },
                 "categories": {

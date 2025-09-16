@@ -12,6 +12,7 @@ type ProductsShops struct {
 	Name      string    `bun:"name" json:"name"`
 	Tag       string    `json:"tag"`
 	LogoImage string    `bun:"logo_image" json:"logo_image"`
+	Banner    string    `bun:"banner" json:"banner"`
 	Address   string    `bun:"address" json:"address"`
 	Phone     string    `bun:"home_phone" json:"phone"`
 	Score     float32   `bun:"score" json:"score"`

@@ -686,6 +686,9 @@ const docTemplate = `{
                 "address": {
                     "type": "string"
                 },
+                "banner": {
+                    "type": "string"
+                },
                 "home_phone": {
                     "type": "string"
                 },
@@ -771,6 +774,9 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "address": {
+                    "type": "string"
+                },
+                "banner": {
                     "type": "string"
                 },
                 "categories": {

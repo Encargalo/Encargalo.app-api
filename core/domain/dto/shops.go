@@ -11,6 +11,7 @@ type ShopResponse struct {
 	Address   string    `json:"address"`
 	HomePhone string    `json:"home_phone"`
 	Logo      string    `json:"logo"`
+	Banner    string    `json:"banner"`
 	Opened    bool      `json:"opened"`
 	Type      string    `json:"type"`
 	Score     float64   `json:"score"`
