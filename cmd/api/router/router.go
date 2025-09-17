@@ -15,21 +15,19 @@ import (
 )
 
 type Router struct {
-	server          *echo.Echo
-	productsGroup   groups.ProductsGroup
-	orderGroup      groups.OrdersGroup
-	promotionsGroup groups.PromotionsGroup
-	shopsGroup      groups.ShopsGroup
-	customersGroup  groups.CustomersGroup
-	sessionsGroup   groups.SessionsGroup
-	config          config.Config
+	server         *echo.Echo
+	productsGroup  groups.ProductsGroup
+	orderGroup     groups.OrdersGroup
+	shopsGroup     groups.ShopsGroup
+	customersGroup groups.CustomersGroup
+	sessionsGroup  groups.SessionsGroup
+	config         config.Config
 }
 
 func New(
 	server *echo.Echo,
 	productsGroup groups.ProductsGroup,
 	orderGroup groups.OrdersGroup,
-	promotionsGroup groups.PromotionsGroup,
 	shopsGroup groups.ShopsGroup,
 	customersGroup groups.CustomersGroup,
 	sessionsGroup groups.SessionsGroup,
@@ -39,7 +37,6 @@ func New(
 		server,
 		productsGroup,
 		orderGroup,
-		promotionsGroup,
 		shopsGroup,
 		customersGroup,
 		sessionsGroup,
@@ -68,7 +65,6 @@ func (r *Router) Init() {
 
 	r.productsGroup.Resource(r.server)
 	r.orderGroup.Resource(r.server)
-	r.promotionsGroup.Resource(r.server)
 	r.shopsGroup.Resource(r.server)
 	r.customersGroup.Resource(r.server)
 	r.sessionsGroup.Resource(r.server)

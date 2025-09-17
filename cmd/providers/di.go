@@ -49,7 +49,6 @@ func BuildContainer() *dig.Container {
 
 	_ = Container.Provide(groups.NewProductsGroup)
 	_ = Container.Provide(groups.NewOrdersGroup)
-	_ = Container.Provide(groups.NewPromotionsGroup)
 	_ = Container.Provide(groups.NewShopsGroup)
 	_ = Container.Provide(groups.NewCustomersGroup)
 	_ = Container.Provide(groups.NewSessionsGroup)
@@ -59,7 +58,6 @@ func BuildContainer() *dig.Container {
 
 	_ = Container.Provide(handler.NewProducts)
 	_ = Container.Provide(order.NewOrdersHandler)
-	_ = Container.Provide(handler.NewPromos)
 	_ = Container.Provide(handler.NewShopsHandler)
 	_ = Container.Provide(customers.NewCustomersHandler)
 	_ = Container.Provide(customers.NewSignInCustomers)
@@ -69,7 +67,6 @@ func BuildContainer() *dig.Container {
 	_ = Container.Provide(sessionsApp.NewSessionsApp)
 	_ = Container.Provide(app.NewProductsApp)
 	_ = Container.Provide(orders.NewOrdersApp)
-	_ = Container.Provide(app.NewPromotionsApp)
 	_ = Container.Provide(app.NewShopsApp)
 	_ = Container.Provide(customersApp.NewCustomerApp)
 	_ = Container.Provide(customersApp.NewCustomersSessionsApp)
@@ -78,7 +75,6 @@ func BuildContainer() *dig.Container {
 	_ = Container.Provide(sessions.NewSessionsRepo)
 	_ = Container.Provide(repo.NewProductsRepo)
 	_ = Container.Provide(repo.NewOrdersRepo)
-	_ = Container.Provide(repo.NewPromotionsRepository)
 	_ = Container.Provide(repo.NewShopsRepository)
 	_ = Container.Provide(customersRepo.NewCustomersRepo)
 	_ = Container.Provide(customersRepo.NewCustomersAddressRepo)
