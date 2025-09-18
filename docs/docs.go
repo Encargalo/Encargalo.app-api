@@ -344,7 +344,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/models.Items"
+                                "$ref": "#/definitions/items.Items"
                             }
                         }
                     },
@@ -394,7 +394,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/models.Items"
+                                "$ref": "#/definitions/items.Items"
                             }
                         }
                     },
@@ -483,7 +483,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.ProductsShops"
+                            "$ref": "#/definitions/items.ItemsShops"
                         }
                     },
                     "404": {
@@ -715,7 +715,7 @@ const docTemplate = `{
                 }
             }
         },
-        "models.Categories": {
+        "items.Categories": {
             "type": "object",
             "properties": {
                 "id": {
@@ -724,7 +724,7 @@ const docTemplate = `{
                 "items": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/models.Items"
+                        "$ref": "#/definitions/items.Items"
                     }
                 },
                 "name": {
@@ -735,7 +735,7 @@ const docTemplate = `{
                 }
             }
         },
-        "models.Items": {
+        "items.Items": {
             "type": "object",
             "properties": {
                 "category_id": {
@@ -762,15 +762,12 @@ const docTemplate = `{
                 "score": {
                     "type": "number"
                 },
-                "shop": {
-                    "$ref": "#/definitions/models.ProductsShops"
-                },
                 "shop_id": {
                     "type": "string"
                 }
             }
         },
-        "models.ProductsShops": {
+        "items.ItemsShops": {
             "type": "object",
             "properties": {
                 "address": {
@@ -782,7 +779,7 @@ const docTemplate = `{
                 "categories": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/models.Categories"
+                        "$ref": "#/definitions/items.Categories"
                     }
                 },
                 "id": {

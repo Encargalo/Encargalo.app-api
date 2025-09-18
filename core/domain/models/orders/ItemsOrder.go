@@ -2,7 +2,7 @@ package orders
 
 import (
 	"CaliYa/core/domain/dto/order"
-	"CaliYa/core/domain/models"
+	itemsModels "CaliYa/core/domain/models/items"
 
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
@@ -26,7 +26,7 @@ func (io *ItemsOrder) BuildDtoToModel(dto order.ItemsOrder, orderID uuid.UUID) {
 	io.Observation = dto.Observation
 }
 
-func (o *Order) SetPrices(items []models.Items) {
+func (o *Order) SetPrices(items []itemsModels.Items) {
 
 	for _, item := range items {
 		for i, io := range o.ItemsOrder {

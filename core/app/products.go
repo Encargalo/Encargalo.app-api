@@ -1,7 +1,7 @@
 package app
 
 import (
-	"CaliYa/core/domain/models"
+	ItemsModels "CaliYa/core/domain/models/items"
 	"CaliYa/core/domain/ports"
 	"context"
 
@@ -25,10 +25,10 @@ func (p *productsApp) RegisterProduct(ctx context.Context) error {
 	return nil
 }
 
-func (p *productsApp) GetProductByCategory(ctx context.Context, category string) ([]models.Items, error) {
+func (p *productsApp) GetProductByCategory(ctx context.Context, category string) ([]ItemsModels.Items, error) {
 	return p.repo.GetProductByCategory(ctx, category)
 }
 
-func (p *productsApp) GetAditionsByCategory(ctx context.Context, id uuid.UUID) ([]models.Items, error) {
+func (p *productsApp) GetAditionsByCategory(ctx context.Context, id uuid.UUID) ([]ItemsModels.Items, error) {
 	return p.repo.GetAditionsByCategory(ctx, id)
 }

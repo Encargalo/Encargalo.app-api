@@ -1,4 +1,4 @@
-package models
+package shop
 
 import (
 	"CaliYa/core/domain/dto"

@@ -2,7 +2,8 @@ package repo
 
 import (
 	"CaliYa/core/domain/dto"
-	"CaliYa/core/domain/models"
+	"CaliYa/core/domain/models/items"
+	shop "CaliYa/core/domain/models/shop"
 	"CaliYa/core/domain/ports"
 	calierrors "CaliYa/core/errors"
 	"errors"
@@ -27,7 +28,7 @@ func NewShopsRepository(db *bun.DB) ports.ShopsRepo {
 
 func (s *shopsRepo) GetAllShops(ctx context.Context) (dto.ShopsResponse, error) {
 
-	var shops models.Shops
+	var shops shop.Shops
 
 	if err := s.db.NewSelect().Model(&shops).Order("score DESC").
 		Where("license_status = ? and opened = ? and tag != ?", "active", true, "test").
@@ -42,13 +43,13 @@ func (s *shopsRepo) GetAllShops(ctx context.Context) (dto.ShopsResponse, error) 
 	return shops.ToDomainDTO(), nil
 }
 
-func (p *shopsRepo) GetShopsBy(ctx context.Context, criteria dto.SearchShopsByID) (*models.ProductsShops, error) {
+func (p *shopsRepo) GetShopsBy(ctx context.Context, criteria dto.SearchShopsByID) (*items.ItemsShops, error) {
 
 	if criteria.ID == uuid.Nil && criteria.Tag == "" {
 		return nil, echo.NewHTTPError(http.StatusBadRequest, "at least one search criteria is required")
 	}
 
-	products := new(models.ProductsShops)
+	products := new(items.ItemsShops)
 
 	if err := p.db.NewSelect().
 		Model(products).

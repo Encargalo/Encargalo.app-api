@@ -1,7 +1,7 @@
 package repo
 
 import (
-	"CaliYa/core/domain/models"
+	itemsModels "CaliYa/core/domain/models/items"
 	ordersModels "CaliYa/core/domain/models/orders"
 	"CaliYa/core/domain/ports"
 	"context"
@@ -42,7 +42,7 @@ func (o *orders) RegisterOrders(ctx context.Context, order *ordersModels.Order) 
 
 func (o *orders) CalculatePrice(ctx context.Context, orders *ordersModels.Order) {
 
-	var items []models.Items
+	var items []itemsModels.Items
 
 	err := o.db.NewSelect().Table("products.items").Where("id in (?)", bun.In(orders.GetItemsID())).Scan(ctx, &items)
 

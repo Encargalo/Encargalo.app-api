@@ -56,7 +56,7 @@ func (s *shops) GetAllShops(c echo.Context) error {
 // @Produce json
 // @Param id query string false "Este es el ID del negocio, viene en formato UUID"
 // @Param tag query string false "Este es el tag del negocio .ej:dmo"
-// @Success 200 {object} models.ProductsShops
+// @Success 200 {object} items.ItemsShops
 // @Failure 404
 // @Failure 500
 // @Router /shops [get]

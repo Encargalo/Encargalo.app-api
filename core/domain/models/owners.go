@@ -1,6 +1,7 @@
 package models
 
 import (
+	"CaliYa/core/domain/models/shop"
 	"time"
 
 	"github.com/google/uuid"
@@ -18,5 +19,5 @@ type Owners struct {
 	UpdatedAt time.Time `bun:"updated_at,default:now()" json:"updated_at"`
 	DeletedAt time.Time `bun:"deleted_at" json:"deleted_at"`
 
-	Shops []Shops `bun:"rel:has-many,join:id=owner_id" json:"shops"`
+	Shops []shop.Shops `bun:"rel:has-many,join:id=owner_id" json:"shops"`
 }

@@ -1,7 +1,7 @@
 package ports
 
 import (
-	"CaliYa/core/domain/models"
+	ItemsModels "CaliYa/core/domain/models/items"
 	"context"
 
 	"github.com/google/uuid"
@@ -9,11 +9,11 @@ import (
 
 type ProductsApp interface {
 	RegisterProduct(ctx context.Context) error
-	GetProductByCategory(ctx context.Context, category string) ([]models.Items, error)
-	GetAditionsByCategory(ctx context.Context, id uuid.UUID) ([]models.Items, error)
+	GetProductByCategory(ctx context.Context, category string) ([]ItemsModels.Items, error)
+	GetAditionsByCategory(ctx context.Context, id uuid.UUID) ([]ItemsModels.Items, error)
 }
 
 type ProductsRepo interface {
-	GetProductByCategory(ctx context.Context, category string) ([]models.Items, error)
-	GetAditionsByCategory(ctx context.Context, id uuid.UUID) ([]models.Items, error)
+	GetProductByCategory(ctx context.Context, category string) ([]ItemsModels.Items, error)
+	GetAditionsByCategory(ctx context.Context, id uuid.UUID) ([]ItemsModels.Items, error)
 }

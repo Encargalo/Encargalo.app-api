@@ -1,4 +1,4 @@
-package models
+package items
 
 import (
 	"time"
@@ -23,5 +23,5 @@ type Items struct {
 	UpdatedAt   time.Time `bun:"updated_at,default:now()" json:"-"`
 	DeletedAt   time.Time `bun:"deleted_at" json:"-"`
 
-	ProductsShops *ProductsShops `bun:"rel:belongs-to,join:shop_id=id" json:"shop,omitempty"`
+	Shops *ItemsShops `bun:"rel:belongs-to,join:shop_id=id" json:"shop,omitempty" swaggerignore:"true"`
 }

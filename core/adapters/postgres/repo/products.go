@@ -1,7 +1,7 @@
 package repo
 
 import (
-	"CaliYa/core/domain/models"
+	itemsModels "CaliYa/core/domain/models/items"
 	"CaliYa/core/domain/ports"
 	calierrors "CaliYa/core/errors"
 	"context"
@@ -21,28 +21,28 @@ func NewProductsRepo(db *bun.DB) ports.ProductsRepo {
 	return &productsRepo{db}
 }
 
-func (p *productsRepo) GetProductByCategory(ctx context.Context, category string) ([]models.Items, error) {
+func (p *productsRepo) GetProductByCategory(ctx context.Context, category string) ([]itemsModels.Items, error) {
 
-	items := []models.Items{}
+	items := []itemsModels.Items{}
 
 	if err := p.db.NewSelect().
 		Model(&items).Join("left join products.categories AS c on c.id = items.category_id").
 		OrderExpr("price ASC").
 		Where("c.name ILIKE ? and is_available = ?", "%"+category+"%", true).
-		Relation("ProductsShops").
+		Relation("Shops").
 		Scan(ctx); err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			return []models.Items{}, calierrors.ErrNotFound
+			return []itemsModels.Items{}, calierrors.ErrNotFound
 		}
 		fmt.Println(err.Error())
-		return []models.Items{}, calierrors.ErrUnexpected
+		return []itemsModels.Items{}, calierrors.ErrUnexpected
 	}
 
 	return items, nil
 }
 
-func (p *productsRepo) GetAditionsByCategory(ctx context.Context, id uuid.UUID) ([]models.Items, error) {
-	adiciones := []models.Items{}
+func (p *productsRepo) GetAditionsByCategory(ctx context.Context, id uuid.UUID) ([]itemsModels.Items, error) {
+	adiciones := []itemsModels.Items{}
 
 	err := p.db.NewSelect().Model(&adiciones).
 		Join("left join products.categories_adiciones as ca on items.id = ca.item_id").

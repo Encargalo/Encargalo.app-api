@@ -137,20 +137,20 @@ definitions:
       type:
         type: string
     type: object
-  models.Categories:
+  items.Categories:
     properties:
       id:
         type: string
       items:
         items:
-          $ref: '#/definitions/models.Items'
+          $ref: '#/definitions/items.Items'
         type: array
       name:
         type: string
       shop_id:
         type: string
     type: object
-  models.Items:
+  items.Items:
     properties:
       category_id:
         type: string
@@ -168,12 +168,10 @@ definitions:
         type: integer
       score:
         type: number
-      shop:
-        $ref: '#/definitions/models.ProductsShops'
       shop_id:
         type: string
     type: object
-  models.ProductsShops:
+  items.ItemsShops:
     properties:
       address:
         type: string
@@ -181,7 +179,7 @@ definitions:
         type: string
       categories:
         items:
-          $ref: '#/definitions/models.Categories'
+          $ref: '#/definitions/items.Categories'
         type: array
       id:
         type: string
@@ -423,7 +421,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/models.Items'
+              $ref: '#/definitions/items.Items'
             type: array
         "400":
           description: Se retorna cuando el param se envía vacío o no es un UUID Valido.
@@ -459,7 +457,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/models.Items'
+              $ref: '#/definitions/items.Items'
             type: array
         "400":
           description: Se retorna cuando cuando el valor es vacio o el valor es menor
@@ -518,7 +516,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.ProductsShops'
+            $ref: '#/definitions/items.ItemsShops'
         "404":
           description: Not Found
         "500":

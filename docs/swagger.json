@@ -339,7 +339,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/models.Items"
+                                "$ref": "#/definitions/items.Items"
                             }
                         }
                     },
@@ -389,7 +389,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/models.Items"
+                                "$ref": "#/definitions/items.Items"
                             }
                         }
                     },
@@ -478,7 +478,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.ProductsShops"
+                            "$ref": "#/definitions/items.ItemsShops"
                         }
                     },
                     "404": {
@@ -710,7 +710,7 @@
                 }
             }
         },
-        "models.Categories": {
+        "items.Categories": {
             "type": "object",
             "properties": {
                 "id": {
@@ -719,7 +719,7 @@
                 "items": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/models.Items"
+                        "$ref": "#/definitions/items.Items"
                     }
                 },
                 "name": {
@@ -730,7 +730,7 @@
                 }
             }
         },
-        "models.Items": {
+        "items.Items": {
             "type": "object",
             "properties": {
                 "category_id": {
@@ -757,15 +757,12 @@
                 "score": {
                     "type": "number"
                 },
-                "shop": {
-                    "$ref": "#/definitions/models.ProductsShops"
-                },
                 "shop_id": {
                     "type": "string"
                 }
             }
         },
-        "models.ProductsShops": {
+        "items.ItemsShops": {
             "type": "object",
             "properties": {
                 "address": {
@@ -777,7 +774,7 @@
                 "categories": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/models.Categories"
+                        "$ref": "#/definitions/items.Categories"
                     }
                 },
                 "id": {

@@ -1,11 +1,11 @@
-package models
+package items
 
 import (
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
 )
 
-type ProductsShops struct {
+type ItemsShops struct {
 	bun.BaseModel `bun:"table:business.shops" swaggerignore:"true"`
 
 	ID        uuid.UUID `bun:"id,pk,type:uuid,default:uuid_generate_v4()" json:"id"`
