@@ -4,6 +4,7 @@ import (
 	"CaliYa/cmd/api/handler"
 	"CaliYa/cmd/api/handler/customers"
 	"CaliYa/cmd/api/handler/order"
+	productsHand "CaliYa/cmd/api/handler/products"
 	middleware "CaliYa/cmd/api/middleware/requets"
 	"CaliYa/cmd/api/router"
 	"CaliYa/cmd/api/router/groups"
@@ -56,7 +57,7 @@ func BuildContainer() *dig.Container {
 	_ = Container.Provide(middleware.NewRequestMiddleware)
 	_ = Container.Provide(middleware.NewAuthMidlleware)
 
-	_ = Container.Provide(handler.NewProducts)
+	_ = Container.Provide(productsHand.NewProducts)
 	_ = Container.Provide(order.NewOrdersHandler)
 	_ = Container.Provide(handler.NewShopsHandler)
 	_ = Container.Provide(customers.NewCustomersHandler)

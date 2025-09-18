@@ -1,7 +1,7 @@
 package groups
 
 import (
-	"CaliYa/cmd/api/handler"
+	productsHand "CaliYa/cmd/api/handler/products"
 
 	"github.com/labstack/echo/v4"
 )
@@ -11,10 +11,10 @@ type ProductsGroup interface {
 }
 
 type productsGroup struct {
-	handlerProducts handler.Products
+	handlerProducts productsHand.Products
 }
 
-func NewProductsGroup(handlerProducts handler.Products) ProductsGroup {
+func NewProductsGroup(handlerProducts productsHand.Products) ProductsGroup {
 	return &productsGroup{handlerProducts}
 }
 
