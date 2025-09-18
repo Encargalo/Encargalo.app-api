@@ -893,7 +893,7 @@ var SwaggerInfo = &swag.Spec{
 	Host:             "",
 	BasePath:         "",
 	Schemes:          []string{"https"},
-	Title:            "Documentation API CaliYa",
+	Title:            "Documentation API Encargalo",
 	Description:      "",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,

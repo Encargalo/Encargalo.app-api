@@ -214,7 +214,7 @@ definitions:
     type: object
 info:
   contact: {}
-  title: Documentation API CaliYa
+  title: Documentation API Encargalo
   version: 1.0.1
 paths:
   /customers:

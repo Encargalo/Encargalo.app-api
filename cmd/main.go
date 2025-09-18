@@ -10,7 +10,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-// @title Documentation API CaliYa
+// @title Documentation API Encargalo
 // @version 1.0.1
 // @Schemes https
 func main() {
