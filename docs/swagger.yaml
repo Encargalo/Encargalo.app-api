@@ -1,4 +1,3 @@
-basePath: /api
 definitions:
   customers.Address:
     properties:
@@ -148,6 +147,23 @@ definitions:
       name:
         type: string
       shop_id:
+        type: string
+    type: object
+  items.Flavor:
+    properties:
+      createdAt:
+        type: string
+      deletedAt:
+        type: string
+      description:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      productID:
+        type: string
+      updatedAt:
         type: string
     type: object
   items.Items:
@@ -475,6 +491,41 @@ paths:
       summary: Se obtienen todos los productos de una misma categoria.
       tags:
       - Products
+  /products/flavors:
+    get:
+      consumes:
+      - application/json
+      description: Returns the list of flavors associated with a given product
+      parameters:
+      - description: Product ID (UUID)
+        in: query
+        name: product_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/items.Flavor'
+            type: array
+        "400":
+          description: Invalid product_id or missing parameter
+          schema:
+            type: string
+        "404":
+          description: No flavors found for the given product
+          schema:
+            type: string
+        "500":
+          description: Unexpected internal server error
+          schema:
+            type: string
+      summary: Get flavors by product ID
+      tags:
+      - Flavors
   /sessions:
     delete:
       description: Elimina la sesión activa identificada por session_id en la cookie
@@ -544,5 +595,5 @@ paths:
       tags:
       - Shops
 schemes:
-- http
+- https
 swagger: "2.0"

@@ -12,8 +12,7 @@ import (
 
 // @title Documentation API CaliYa
 // @version 1.0.1
-// @BasePath /api
-// @Schemes http
+// @Schemes https
 func main() {
 
 	container := providers.BuildContainer()

@@ -1,4 +1,4 @@
-package repo
+package products
 
 import (
 	itemsModels "CaliYa/core/domain/models/items"

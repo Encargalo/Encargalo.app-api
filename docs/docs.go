@@ -419,6 +419,59 @@ const docTemplate = `{
                 }
             }
         },
+        "/products/flavors": {
+            "get": {
+                "description": "Returns the list of flavors associated with a given product",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Flavors"
+                ],
+                "summary": "Get flavors by product ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Product ID (UUID)",
+                        "name": "product_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/items.Flavor"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid product_id or missing parameter",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "No flavors found for the given product",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Unexpected internal server error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/sessions": {
             "delete": {
                 "security": [
@@ -735,6 +788,32 @@ const docTemplate = `{
                 }
             }
         },
+        "items.Flavor": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "deletedAt": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "productID": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
         "items.Items": {
             "type": "object",
             "properties": {
@@ -812,8 +891,8 @@ const docTemplate = `{
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0.1",
 	Host:             "",
-	BasePath:         "/api",
-	Schemes:          []string{"http"},
+	BasePath:         "",
+	Schemes:          []string{"https"},
 	Title:            "Documentation API CaliYa",
 	Description:      "",
 	InfoInstanceName: "swagger",

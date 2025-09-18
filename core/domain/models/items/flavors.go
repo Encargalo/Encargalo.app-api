@@ -8,7 +8,7 @@ import (
 )
 
 type Flavor struct {
-	bun.BaseModel `bun:"table:products.flavors"`
+	bun.BaseModel `bun:"table:products.flavors" swaggerignore:"true"`
 
 	ID          uuid.UUID  `bun:"id,pk,type:uuid,default:uuid_generate_v4()"`
 	ProductID   uuid.UUID  `bun:"product_id,notnull,type:uuid"`

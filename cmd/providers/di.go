@@ -12,6 +12,7 @@ import (
 	"CaliYa/core/adapters/mongo"
 	"CaliYa/core/adapters/postgres"
 	"CaliYa/core/adapters/postgres/repo"
+	productsRepo "CaliYa/core/adapters/postgres/repo/products"
 	"CaliYa/core/adapters/postgres/repo/sessions"
 	adapters "CaliYa/core/adapters/twilio"
 	"CaliYa/core/app"
@@ -22,6 +23,7 @@ import (
 	customersRepo "CaliYa/core/adapters/postgres/repo/customers"
 	customersApp "CaliYa/core/app/customers"
 	"CaliYa/core/app/orders"
+	"CaliYa/core/app/products"
 	sessionsApp "CaliYa/core/app/sessions"
 
 	"github.com/labstack/echo/v4"
@@ -58,6 +60,7 @@ func BuildContainer() *dig.Container {
 	_ = Container.Provide(middleware.NewAuthMidlleware)
 
 	_ = Container.Provide(productsHand.NewProducts)
+	_ = Container.Provide(productsHand.NewFlavorsHandlers)
 	_ = Container.Provide(order.NewOrdersHandler)
 	_ = Container.Provide(handler.NewShopsHandler)
 	_ = Container.Provide(customers.NewCustomersHandler)
@@ -67,6 +70,7 @@ func BuildContainer() *dig.Container {
 
 	_ = Container.Provide(sessionsApp.NewSessionsApp)
 	_ = Container.Provide(app.NewProductsApp)
+	_ = Container.Provide(products.NewFlavorService)
 	_ = Container.Provide(orders.NewOrdersApp)
 	_ = Container.Provide(app.NewShopsApp)
 	_ = Container.Provide(customersApp.NewCustomerApp)
@@ -74,7 +78,8 @@ func BuildContainer() *dig.Container {
 	_ = Container.Provide(customersApp.NewCustomersAddressApp)
 
 	_ = Container.Provide(sessions.NewSessionsRepo)
-	_ = Container.Provide(repo.NewProductsRepo)
+	_ = Container.Provide(productsRepo.NewProductsRepo)
+	_ = Container.Provide(productsRepo.NewFlavorRepo)
 	_ = Container.Provide(repo.NewOrdersRepo)
 	_ = Container.Provide(repo.NewShopsRepository)
 	_ = Container.Provide(customersRepo.NewCustomersRepo)
