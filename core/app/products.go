@@ -2,17 +2,17 @@ package app
 
 import (
 	ItemsModels "CaliYa/core/domain/models/items"
-	"CaliYa/core/domain/ports"
+	productsPort "CaliYa/core/domain/ports/products"
 	"context"
 
 	"github.com/google/uuid"
 )
 
 type productsApp struct {
-	repo ports.ProductsRepo
+	repo productsPort.ProductsRepo
 }
 
-func NewProductsApp(repo ports.ProductsRepo) ports.ProductsApp {
+func NewProductsApp(repo productsPort.ProductsRepo) productsPort.ProductsApp {
 	return &productsApp{repo}
 }
 

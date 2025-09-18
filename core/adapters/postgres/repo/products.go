@@ -2,7 +2,7 @@ package repo
 
 import (
 	itemsModels "CaliYa/core/domain/models/items"
-	"CaliYa/core/domain/ports"
+	productsPort "CaliYa/core/domain/ports/products"
 	calierrors "CaliYa/core/errors"
 	"context"
 	"database/sql"
@@ -17,7 +17,7 @@ type productsRepo struct {
 	db *bun.DB
 }
 
-func NewProductsRepo(db *bun.DB) ports.ProductsRepo {
+func NewProductsRepo(db *bun.DB) productsPort.ProductsRepo {
 	return &productsRepo{db}
 }
 

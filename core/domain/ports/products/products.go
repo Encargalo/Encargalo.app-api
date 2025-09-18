@@ -1,4 +1,4 @@
-package ports
+package products
 
 import (
 	ItemsModels "CaliYa/core/domain/models/items"

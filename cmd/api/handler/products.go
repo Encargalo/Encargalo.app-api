@@ -2,7 +2,7 @@ package handler
 
 import (
 	"CaliYa/core/domain/dto"
-	"CaliYa/core/domain/ports"
+	productsPort "CaliYa/core/domain/ports/products"
 	calierrors "CaliYa/core/errors"
 	"errors"
 	"net/http"
@@ -17,10 +17,10 @@ type Products interface {
 }
 
 type products struct {
-	app ports.ProductsApp
+	app productsPort.ProductsApp
 }
 
-func NewProducts(app ports.ProductsApp) Products {
+func NewProducts(app productsPort.ProductsApp) Products {
 	return &products{app}
 }
 
