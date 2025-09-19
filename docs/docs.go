@@ -771,6 +771,12 @@ const docTemplate = `{
         "items.Categories": {
             "type": "object",
             "properties": {
+                "flavors": {
+                    "type": "boolean"
+                },
+                "flavors_type": {
+                    "type": "string"
+                },
                 "id": {
                     "type": "string"
                 },
